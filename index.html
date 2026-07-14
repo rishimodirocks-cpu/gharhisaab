@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Family Ledger</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --forest: #223B34;
+    --forest-dark: #16281F;
+    --paper: #FBF7EF;
+    --paper-line: #E4DCC9;
+    --ink: #24261F;
+    --ink-soft: #6B6A5E;
+    --home: #B7862C;
+    --home-bg: #FBF0DC;
+    --us: #A85B62;
+    --us-bg: #F8E9E9;
+    --danger: #A8433A;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--forest-dark);
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    -webkit-tap-highlight-color:transparent;
+  }
+  #app{
+    width:100%;
+    max-width:480px;
+    min-height:100vh;
+    background:var(--paper);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+  header{
+    background:var(--forest);
+    color:var(--paper);
+    padding:22px 20px 26px;
+    position:relative;
+  }
+  header::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-1px;
+    height:14px;
+    background:
+      radial-gradient(circle at 10px 0, transparent 8px, var(--forest) 8px) 0 -8px / 20px 16px repeat-x;
+  }
+  .brand{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:22px;
+    letter-spacing:0.2px;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .brand .no{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    opacity:0.55;
+    letter-spacing:1px;
+  }
+  .date-sub{
+    font-size:12.5px;
+    opacity:0.7;
+    margin-top:3px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+
+  .totals{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+    padding:16px 16px 4px;
+    margin-top:2px;
+  }
+  .tot-card{
+    border-radius:10px;
+    padding:10px 8px;
+    text-align:center;
+    border:1px solid var(--paper-line);
+    background:#fff;
+  }
+  .tot-card .lbl{
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.6px;
+    opacity:0.65;
+    font-weight:600;
+  }
+  .tot-card .amt{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:16px;
+    font-weight:600;
+    margin-top:4px;
+  }
+  .tot-card.home{border-color:#EBD4A0;} .tot-card.home .lbl{color:var(--home);}
+  .tot-card.us{border-color:#E7C6C6;} .tot-card.us .lbl{color:var(--us);}
+  .month-toggle{
+    text-align:center;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin:6px 0 2px;
+    font-family:'IBM Plex Mono',monospace;
+    letter-spacing:0.4px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .month-toggle b{color:var(--ink);}
+
+  .entry-card{
+    margin:14px 16px;
+    background:#fff;
+    border-radius:14px;
+    padding:16px;
+    border:1px solid var(--paper-line);
+    box-shadow:0 1px 0 rgba(0,0,0,0.02);
+  }
+  .cat-row{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+    margin-bottom:14px;
+  }
+  .cat-btn{
+    border:1.5px solid var(--paper-line);
+    background:#fff;
+    border-radius:10px;
+    padding:10px 4px 8px;
+    text-align:center;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+    transition:all .12s ease;
+  }
+  .cat-btn .ic{font-size:18px;display:block;margin-bottom:3px;}
+  .cat-btn .tx{font-size:11.5px;font-weight:600;color:var(--ink-soft);}
+  .cat-btn.active.home{background:var(--home-bg);border-color:var(--home);} .cat-btn.active.home .tx{color:var(--home);}
+  .cat-btn.active.us{background:var(--us-bg);border-color:var(--us);} .cat-btn.active.us .tx{color:var(--us);}
+
+  .subcat-row{
+    display:flex;
+    gap:6px;
+    margin:-4px 0 12px;
+  }
+  .subcat-btn{
+    flex:1;
+    text-align:center;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+    border:1px solid var(--paper-line);
+    border-radius:8px;
+    padding:7px 4px;
+    cursor:pointer;
+  }
+  .subcat-btn.active{background:var(--home-bg);border-color:var(--home);color:var(--home);}
+
+  .chip-wrap{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin:-4px 0 14px;
+    max-height:110px;
+    overflow-y:auto;
+    padding:2px;
+  }
+  .chip{
+    font-size:12px;
+    font-weight:500;
+    color:var(--ink);
+    background:var(--paper);
+    border:1px solid var(--paper-line);
+    border-radius:20px;
+    padding:6px 12px;
+    cursor:pointer;
+  }
+  .chip.active{background:var(--home);border-color:var(--home);color:#fff;}
+  .entry .sub-tag{
+    font-size:10.5px;
+    color:var(--home);
+    background:var(--home-bg);
+    border-radius:6px;
+    padding:1px 6px;
+    margin-left:6px;
+    font-weight:600;
+  }
+
+  .amount-wrap{
+    display:flex;
+    align-items:baseline;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:6px;
+    margin-bottom:14px;
+  }
+  .amount-wrap .rupee{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:22px;
+    font-weight:600;
+    margin-right:6px;
+    color:var(--ink-soft);
+  }
+  #amount{
+    border:none;
+    outline:none;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:28px;
+    font-weight:600;
+    width:100%;
+    color:var(--ink);
+    background:transparent;
+  }
+  #amount::placeholder{color:#C8C4B4;}
+
+  .row2{
+    display:flex;
+    gap:8px;
+    margin-bottom:14px;
+  }
+  #note{
+    flex:1;
+    border:1px solid var(--paper-line);
+    border-radius:8px;
+    padding:10px 12px;
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    outline:none;
+  }
+  #note:focus{border-color:var(--forest);}
+  #edate{
+    border:1px solid var(--paper-line);
+    border-radius:8px;
+    padding:10px 8px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    outline:none;
+    color:var(--ink-soft);
+    width:120px;
+  }
+
+  #save-btn{
+    width:100%;
+    border:none;
+    background:var(--forest);
+    color:var(--paper);
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:15.5px;
+    padding:13px;
+    border-radius:10px;
+    cursor:pointer;
+    letter-spacing:0.3px;
+  }
+  #save-btn:active{background:var(--forest-dark);}
+  #save-btn:disabled{background:#C9C4B4;cursor:not-allowed;}
+
+  .list-wrap{
+    flex:1;
+    padding:4px 16px 90px;
+  }
+  .day-group{margin-bottom:6px;}
+  .day-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    padding:14px 4px 6px;
+    letter-spacing:0.4px;
+    display:flex;
+    justify-content:space-between;
+  }
+  .day-total{font-weight:600;color:var(--ink);}
+
+  .entry{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#fff;
+    border:1px solid var(--paper-line);
+    border-radius:10px;
+    padding:10px 12px;
+    margin-bottom:6px;
+    position:relative;
+    overflow:hidden;
+  }
+  .entry .tab{
+    position:absolute; left:0; top:0; bottom:0; width:4px;
+  }
+  .entry.home .tab{background:var(--home);}
+  .entry.us .tab{background:var(--us);}
+  .entry .ic{font-size:17px; margin-left:4px;}
+  .entry .body{flex:1; min-width:0;}
+  .entry .note{
+    font-size:13.5px;
+    font-weight:500;
+    color:var(--ink);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .entry .cat-name{
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+  .entry .amt{
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+    font-size:15px;
+    color:var(--ink);
+  }
+  .entry .del{
+    background:none;border:none;color:#C4BFAF;font-size:15px;padding:4px 2px;cursor:pointer;
+  }
+  .entry .del:active{color:var(--danger);}
+
+  .empty{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:13.5px;
+    padding:40px 20px;
+    font-family:'IBM Plex Mono',monospace;
+    line-height:1.7;
+  }
+
+  .toast{
+    position:fixed;
+    bottom:18px;
+    left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:var(--forest);
+    color:var(--paper);
+    padding:10px 18px;
+    border-radius:20px;
+    font-size:13px;
+    opacity:0;
+    transition:all .25s ease;
+    pointer-events:none;
+    white-space:nowrap;
+    font-family:'Inter',sans-serif;
+    z-index:20;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  ::selection{background:#D8CBA6;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <div class="brand">Family Ledger <span class="no">No. 01</span></div>
+    <div class="date-sub" id="today-str"></div>
+  </header>
+
+  <div class="totals" id="totals"></div>
+  <div class="month-toggle" id="month-toggle"></div>
+
+  <div class="entry-card">
+    <div class="cat-row" id="cat-row">
+      <div class="cat-btn home" data-cat="home"><span class="ic">🏠</span><span class="tx">Home</span></div>
+      <div class="cat-btn us" data-cat="us"><span class="ic">💛</span><span class="tx">Me & Aastha</span></div>
+    </div>
+
+    <div class="subcat-row" id="subcat-row" style="display:none;">
+      <div class="subcat-btn" data-sub="veg">🥦 Vegetables</div>
+      <div class="subcat-btn" data-sub="fruit">🍎 Fruits</div>
+      <div class="subcat-btn" data-sub="other">📦 Other</div>
+    </div>
+    <div class="chip-wrap" id="chip-wrap" style="display:none;"></div>
+
+    <div class="amount-wrap">
+      <span class="rupee">₹</span>
+      <input id="amount" type="number" inputmode="decimal" placeholder="0" step="0.01">
+    </div>
+
+    <div class="row2">
+      <input id="note" type="text" placeholder="What was it for?">
+      <input id="edate" type="date">
+    </div>
+
+    <button id="save-btn">Add entry</button>
+  </div>
+
+  <div class="list-wrap" id="list-wrap"></div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+const CATS = {
+  home:  { label:"Home",         icon:"🏠" },
+  us:    { label:"Me & Aastha",  icon:"💛" }
+};
+const SUBCATS = {
+  veg: {
+    label: "Vegetables",
+    items: ["Bhindi","Lauki","Parval","Capsicum","Tomato","Dhania Patta","Lal Patta","Palak Patta","Toru"]
+  },
+  fruit: {
+    label: "Fruits",
+    items: ["Apple","Banana","Watermelon","White Rose Apple","Red Rose Apple","Papaya","Sitafal","Kala Jamun","Mango","Avocado","Kheera"]
+  }
+};
+
+let selectedCat = "home";
+let selectedSub = null;
+let selectedItem = null;
+let entries = [];
+let showAllTime = false;
+
+const $ = (s)=>document.querySelector(s);
+const fmt = (n)=> "₹" + Number(n).toLocaleString('en-IN', {maximumFractionDigits:2});
+const todayISO = ()=> new Date().toISOString().slice(0,10);
+
+function initDates(){
+  $("#edate").value = todayISO();
+  $("#today-str").textContent = new Date().toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+}
+
+function selectCat(cat){
+  selectedCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.cat === cat);
+  });
+  if(cat === 'home'){
+    $("#subcat-row").style.display = 'flex';
+  } else {
+    $("#subcat-row").style.display = 'none';
+    $("#chip-wrap").style.display = 'none';
+    selectedSub = null;
+    selectedItem = null;
+    document.querySelectorAll('.subcat-btn').forEach(b=>b.classList.remove('active'));
+  }
+}
+
+function selectSub(sub){
+  selectedSub = sub;
+  selectedItem = null;
+  document.querySelectorAll('.subcat-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.sub === sub);
+  });
+  const chipWrap = $("#chip-wrap");
+  if(sub === 'other' || !SUBCATS[sub]){
+    chipWrap.style.display = 'none';
+    return;
+  }
+  chipWrap.innerHTML = SUBCATS[sub].items.map(item=>
+    `<div class="chip" data-item="${item}">${item}</div>`
+  ).join('');
+  chipWrap.style.display = 'flex';
+  chipWrap.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      selectedItem = chip.dataset.item;
+      chipWrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      if(!$("#note").value.trim()){
+        $("#note").value = chip.dataset.item;
+      }
+    });
+  });
+}
+
+document.querySelectorAll('.cat-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=> selectCat(btn.dataset.cat));
+});
+document.querySelectorAll('.subcat-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=> selectSub(btn.dataset.sub));
+});
+
+function showToast(msg){
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 1400);
+}
+
+// This tracker stores everything as shared data, so it can be safely
+// opened by anyone in the family — Home and Me & Aastha entries are visible to all.
+
+async function loadEntries(){
+  entries = [];
+  try{
+    const res = await window.storage.get('family-expenses', true);
+    if(res && res.value){
+      entries = JSON.parse(res.value);
+    }
+  }catch(e){}
+  entries.sort((a,b)=> (b.date+b.id).localeCompare(a.date+a.id));
+  render();
+}
+
+async function persist(){
+  try{
+    await window.storage.set('family-expenses', JSON.stringify(entries), true);
+  }catch(e){
+    showToast("Couldn't save — try again");
+  }
+}
+
+async function addEntry(){
+  const amtVal = parseFloat($("#amount").value);
+  if(!amtVal || amtVal <= 0){
+    $("#amount").focus();
+    return;
+  }
+  const entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    cat: selectedCat,
+    sub: (selectedCat === 'home' && selectedSub && selectedSub !== 'other') ? selectedSub : null,
+    amount: amtVal,
+    note: $("#note").value.trim(),
+    date: $("#edate").value || todayISO()
+  };
+  entries.unshift(entry);
+  $("#amount").value = "";
+  $("#note").value = "";
+  selectedItem = null;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  render();
+  $("#save-btn").disabled = true;
+  await persist();
+  $("#save-btn").disabled = false;
+  showToast(CATS[selectedCat].icon + " Added to " + CATS[selectedCat].label);
+}
+
+async function deleteEntry(id){
+  entries = entries.filter(x=>x.id!==id);
+  render();
+  await persist();
+}
+
+$("#save-btn").addEventListener('click', addEntry);
+$("#amount").addEventListener('keydown', (ev)=>{ if(ev.key==='Enter') addEntry(); });
+
+function currentMonthKey(){
+  return todayISO().slice(0,7);
+}
+
+function render(){
+  const monthKey = currentMonthKey();
+  const relevant = showAllTime ? entries : entries.filter(e=> e.date.slice(0,7) === monthKey);
+
+  const totals = {home:0, us:0};
+  relevant.forEach(e=> totals[e.cat] += e.amount);
+  $("#totals").innerHTML = `
+    <div class="tot-card home"><div class="lbl">Home</div><div class="amt">${fmt(totals.home)}</div></div>
+    <div class="tot-card us"><div class="lbl">Me & Aastha</div><div class="amt">${fmt(totals.us)}</div></div>
+  `;
+  $("#month-toggle").innerHTML = showAllTime
+    ? `Showing <b>all time</b> · tap for this month`
+    : `Showing <b>${new Date(monthKey+'-02').toLocaleDateString('en-IN',{month:'long', year:'numeric'})}</b> · tap for all time`;
+
+  if(relevant.length === 0){
+    $("#list-wrap").innerHTML = `<div class="empty">No entries yet.<br>Your first line in the ledger starts above ↑</div>`;
+    return;
+  }
+
+  const groups = {};
+  relevant.forEach(e=>{
+    (groups[e.date] = groups[e.date] || []).push(e);
+  });
+  const dates = Object.keys(groups).sort().reverse();
+
+  let html = "";
+  dates.forEach(date=>{
+    const dayEntries = groups[date];
+    const dayTotal = dayEntries.reduce((s,e)=>s+e.amount,0);
+    const dLabel = new Date(date+'T00:00:00').toLocaleDateString('en-IN', {weekday:'short', day:'numeric', month:'short'});
+    html += `<div class="day-group"><div class="day-label"><span>${dLabel}</span><span class="day-total">${fmt(dayTotal)}</span></div>`;
+    dayEntries.forEach(e=>{
+      const c = CATS[e.cat];
+      html += `
+        <div class="entry ${e.cat}">
+          <div class="tab"></div>
+          <span class="ic">${c.icon}</span>
+          <div class="body">
+            <div class="note">${e.note ? e.note.replace(/</g,'&lt;') : c.label}${e.sub && SUBCATS[e.sub] ? `<span class="sub-tag">${SUBCATS[e.sub].label}</span>` : ''}</div>
+            <div class="cat-name">${c.label}</div>
+          </div>
+          <div class="amt">${fmt(e.amount)}</div>
+          <button class="del" data-id="${e.id}" aria-label="Delete">✕</button>
+        </div>`;
+    });
+    html += `</div>`;
+  });
+  $("#list-wrap").innerHTML = html;
+
+  document.querySelectorAll('.del').forEach(btn=>{
+    btn.addEventListener('click', ()=> deleteEntry(btn.dataset.id));
+  });
+}
+
+$("#month-toggle").addEventListener('click', ()=>{ showAllTime = !showAllTime; render(); });
+
+initDates();
+selectCat('home');
+loadEntries();
+</script>
+</body>
+</html>
