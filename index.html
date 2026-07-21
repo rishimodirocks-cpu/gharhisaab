@@ -3,535 +3,311 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hisaab — your money register</title>
+<title>Hisaab — Personal Money Register</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper: #EFE6D5;
-    --paper-deep: #E6DAC4;
-    --rule: #AEBBD1;
-    --margin-red: #8B2635;
-    --margin-red-soft: rgba(139,38,53,0.12);
-    --ink: #26344A;
-    --ink-soft: #5B6478;
-    --gold: #B8924A;
-    --card: #FBF7EC;
-    --line: rgba(38,52,74,0.12);
-    --shadow: 0 6px 18px rgba(38,52,74,0.10);
+    --paper:#EFE6D5; --paper-deep:#E6DAC4; --rule:#AEBBD1;
+    --margin-red:#8B2635; --margin-red-soft:rgba(139,38,53,0.12);
+    --ink:#26344A; --ink-soft:#5B6478; --gold:#B8924A;
+    --card:#FBF7EC; --line:rgba(38,52,74,0.12);
+    --shadow:0 6px 18px rgba(38,52,74,0.10);
   }
-  *{ box-sizing: border-box; }
+  *{ box-sizing:border-box; }
   html,body{ margin:0; padding:0; }
   body{
-    background:
-      radial-gradient(ellipse at top, var(--paper-deep) 0%, var(--paper) 60%);
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif;
-    color: var(--ink);
-    -webkit-font-smoothing: antialiased;
-  }
-  @media (prefers-reduced-motion: reduce){
-    *{ animation: none !important; transition: none !important; }
-  }
-  .app{
-    max-width: 460px;
-    margin: 0 auto;
-    padding: 1.1rem 1.1rem 3rem;
-    position: relative;
+    background: radial-gradient(ellipse at top, var(--paper-deep) 0%, var(--paper) 60%);
+    min-height:100vh; font-family:'Inter',sans-serif;
+    color:var(--ink); -webkit-font-smoothing:antialiased;
   }
 
-  /* ---------- Header ---------- */
-  .ledger-header{
-    position: relative;
-    padding: 1.4rem 1.3rem 1.3rem;
-    text-align: center;
+  /* ── Login screen ── */
+  .login-wrap{
+    min-height:100vh; display:flex; align-items:center;
+    justify-content:center; padding:1.5rem;
   }
-  .ledger-header h1{
-    font-family: 'Fraunces', serif;
-    font-weight: 700;
-    font-optical-sizing: auto;
-    font-size: 2.4rem;
-    letter-spacing: 0.01em;
-    margin: 0;
-    color: var(--ink);
+  .login-card{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:22px; padding:2rem 1.8rem 2.2rem;
+    width:100%; max-width:380px; box-shadow:var(--shadow);
+    text-align:center;
   }
-  .ledger-header .subtitle{
-    margin: 0.15rem 0 0.9rem;
-    font-size: 0.85rem;
-    color: var(--ink-soft);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+  .login-card h1{
+    font-family:'Fraunces',serif; font-size:2.2rem;
+    font-weight:700; margin:0 0 0.2rem; color:var(--ink);
+  }
+  .login-card .sub{
+    font-size:0.8rem; color:var(--ink-soft); text-transform:uppercase;
+    letter-spacing:0.06em; margin-bottom:1.6rem;
   }
   .brass-rule{
-    height: 3px;
-    width: 88px;
-    margin: 0 auto 0.9rem;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    border-radius: 2px;
+    height:3px; width:70px; margin:0 auto 1.6rem;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    border-radius:2px;
+  }
+  .login-field{ margin-bottom:1rem; text-align:left; }
+  .login-field label{
+    display:block; font-size:0.72rem; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--ink-soft); margin-bottom:0.35rem;
+  }
+  .login-field input{
+    width:100%; border:1.5px solid var(--line); background:var(--paper);
+    border-radius:12px; padding:0.65rem 0.9rem;
+    font-family:'Inter',sans-serif; font-size:1rem; color:var(--ink); outline:none;
+  }
+  .login-field input:focus{ border-color:var(--gold); }
+  .login-btn{
+    width:100%; margin-top:0.5rem; background:var(--ink); color:var(--card);
+    border:none; border-radius:12px; padding:0.8rem;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:0.95rem;
+    cursor:pointer; transition:background 0.15s;
+  }
+  .login-btn:hover{ background:#1b2740; }
+  .login-btn:disabled{ opacity:0.6; cursor:not-allowed; }
+  .login-err{
+    margin-top:0.8rem; color:var(--margin-red);
+    font-size:0.82rem; min-height:1.1rem;
+  }
+
+  /* ── App shell ── */
+  .app{ max-width:460px; margin:0 auto; padding:1.1rem 1.1rem 3rem; }
+
+  /* ── Header ── */
+  .ledger-header{ position:relative; padding:1.4rem 1.3rem 1.3rem; text-align:center; }
+  .ledger-header h1{
+    font-family:'Fraunces',serif; font-weight:700;
+    font-size:2.4rem; letter-spacing:0.01em; margin:0; color:var(--ink);
+  }
+  .ledger-header .subtitle{
+    margin:0.15rem 0 0.9rem; font-size:0.85rem; color:var(--ink-soft);
+    letter-spacing:0.04em; text-transform:uppercase;
   }
   .date-stamp{
-    position: absolute;
-    top: 0.6rem;
-    right: 0.2rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    color: var(--gold);
-    border: 1.5px dashed var(--gold);
-    border-radius: 50%;
-    width: 64px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    line-height: 1.25;
-    transform: rotate(9deg);
-    opacity: 0.85;
-    text-transform: uppercase;
+    position:absolute; top:0.6rem; right:0.2rem;
+    font-family:'IBM Plex Mono',monospace; font-size:0.62rem; font-weight:600;
+    letter-spacing:0.06em; color:var(--gold); border:1.5px dashed var(--gold);
+    border-radius:50%; width:64px; height:64px;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; line-height:1.25; transform:rotate(9deg);
+    opacity:0.85; text-transform:uppercase;
   }
+  .logout-btn{
+    position:absolute; top:0.7rem; left:0.2rem;
+    background:none; border:1.5px solid var(--line);
+    border-radius:999px; padding:0.3rem 0.7rem;
+    font-size:0.72rem; color:var(--ink-soft); cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .logout-btn:hover{ border-color:var(--margin-red); color:var(--margin-red); }
   .month-total{
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.1rem;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 0.6rem 1.4rem;
-    box-shadow: var(--shadow);
+    display:inline-flex; flex-direction:column; align-items:center; gap:0.1rem;
+    background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:0.6rem 1.4rem; box-shadow:var(--shadow);
   }
-  .month-total .label{
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ink-soft);
-  }
-  .month-total .amount{
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    font-size: 1.35rem;
-    color: var(--margin-red);
-  }
+  .month-total .label{ font-size:0.68rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); }
+  .month-total .amount{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:1.35rem; color:var(--margin-red); }
 
-  /* ---------- Entry card ---------- */
-  .entry-card{
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    padding: 1.2rem 1.2rem 1.3rem;
-    margin-top: 1.1rem;
-    box-shadow: var(--shadow);
-  }
-  .entry-card h2{
-    font-family: 'Fraunces', serif;
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin: 0 0 0.9rem;
-    color: var(--ink);
-  }
-  .field{ margin-bottom: 0.85rem; display:block; }
-  .field-label{
-    display:block;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--ink-soft);
-    margin-bottom: 0.35rem;
-  }
-  .amount-input{
-    display:flex;
-    align-items:center;
-    background: var(--paper);
-    border: 1.5px solid var(--line);
-    border-radius: 12px;
-    padding: 0.55rem 0.9rem;
-  }
-  .amount-input span{
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    color: var(--margin-red);
-    margin-right: 0.4rem;
-    font-size: 1.1rem;
-  }
-  .amount-input input{
-    border: none;
-    background: transparent;
-    outline: none;
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    font-size: 1.15rem;
-    color: var(--ink);
-    width: 100%;
-  }
-  input[type="text"], input[type="date"]{
-    width: 100%;
-    border: 1.5px solid var(--line);
-    background: var(--paper);
-    border-radius: 12px;
-    padding: 0.6rem 0.9rem;
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
-    color: var(--ink);
-    outline: none;
-  }
-  input:focus-visible, button:focus-visible{
-    outline: 2px solid var(--gold);
-    outline-offset: 2px;
-  }
-
-  .category-chips{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
-  }
-  .chip{
-    border: 1.5px solid var(--line);
-    background: var(--paper);
-    border-radius: 12px;
-    padding: 0.45rem 0.3rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3rem;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.68rem;
-    color: var(--ink-soft);
-    transition: border-color 0.15s, background 0.15s;
-  }
-  .chip .stamp{
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    border: 1.5px dashed currentColor;
-    display:flex; align-items:center; justify-content:center;
-    font-family: 'Fraunces', serif;
-    font-weight: 700;
-    font-size: 0.78rem;
-    transform: rotate(-6deg);
-  }
-  .chip.active{
-    border-color: var(--ink);
-    background: var(--margin-red-soft);
-    color: var(--ink);
-    font-weight: 600;
-  }
-
-  .when-row{
-    display:flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .when-chip{
-    border: 1.5px solid var(--line);
-    background: var(--paper);
-    border-radius: 999px;
-    padding: 0.4rem 0.85rem;
-    font-size: 0.78rem;
-    color: var(--ink-soft);
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-  }
-  .when-chip.active{
-    border-color: var(--ink);
-    background: var(--ink);
-    color: var(--card);
-    font-weight: 600;
-  }
-  .date-pick{ display:none; flex: 1 1 140px; padding: 0.4rem 0.7rem; font-size: 0.85rem; }
-  .date-pick.show{ display:block; }
-
-  .add-btn{
-    width: 100%;
-    margin-top: 0.95rem;
-    background: var(--ink);
-    color: var(--card);
-    border: none;
-    border-radius: 12px;
-    padding: 0.75rem;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 0.95rem;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    transition: transform 0.1s, background 0.15s;
-  }
-  .add-btn:active{ transform: scale(0.98); }
-  .add-btn:hover{ background: #1b2740; }
-
-  /* ---------- Method summary ---------- */
-  .method-card{
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    padding: 1.1rem 1.2rem 1.2rem;
-    margin-top: 1.1rem;
-    box-shadow: var(--shadow);
-  }
-  .method-card h2{
-    font-family: 'Fraunces', serif;
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin: 0 0 0.8rem;
-    color: var(--ink);
-  }
-  .method-row{ margin-bottom: 0.65rem; }
-  .method-row:last-child{ margin-bottom: 0; }
-  .method-row-top{
-    display:flex;
-    align-items:center;
-    margin-bottom: 0.25rem;
-  }
-  .method-row .dot{
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    margin-right: 0.45rem;
-    flex: 0 0 auto;
-  }
-  .method-row .m-label{
-    flex: 1 1 auto;
-    font-size: 0.85rem;
-    color: var(--ink);
-  }
-  .method-row .m-amount{
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--ink);
-  }
-  .method-bar{
-    height: 5px;
-    border-radius: 4px;
-    background: var(--line);
-    overflow: hidden;
-  }
-  .method-bar-fill{
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.3s ease;
-  }
-  .method-empty{
-    font-size: 0.85rem;
-    color: var(--ink-soft);
-  }
-  .row .cat .dot{
-    display:inline-block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    margin-right: 4px;
-    vertical-align: middle;
-  }
-
-  /* ---------- Ledger list ---------- */
-  .ledger-list{ margin-top: 1.6rem; }
-  .day-group{ margin-bottom: 1.3rem; }
-  .day-head{
-    display:flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 0 0.2rem 0.4rem;
-    border-bottom: 1.5px solid var(--gold);
-  }
-  .day-head .day-label{
-    font-family: 'Fraunces', serif;
-    font-weight: 600;
-    font-size: 0.92rem;
-    color: var(--ink);
-  }
-  .day-head .day-total{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.82rem;
-    color: var(--ink-soft);
-  }
-  .row{
-    position: relative;
-    display:flex;
-    align-items:center;
-    gap: 0.7rem;
-    padding: 0.65rem 0.4rem 0.65rem 0.9rem;
-    border-bottom: 1px dashed var(--rule);
-  }
-  .row::before{
-    content:"";
-    position:absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--margin-red);
-    opacity: 0.55;
-  }
-  .row .stamp{
-    flex: 0 0 auto;
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    border: 1.5px dashed currentColor;
-    display:flex; align-items:center; justify-content:center;
-    font-family: 'Fraunces', serif;
-    font-weight: 700;
-    font-size: 0.85rem;
-    transform: rotate(-5deg);
-  }
-  .row .desc{
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-  .row .desc .note{
-    font-size: 0.92rem;
-    color: var(--ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .row .desc .cat{
-    font-size: 0.7rem;
-    color: var(--ink-soft);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  .row .amount{
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--margin-red);
-    white-space: nowrap;
-  }
-  .row .del{
-    flex: 0 0 auto;
-    background: none;
-    border: none;
-    color: var(--ink-soft);
-    font-size: 1.1rem;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0.2rem 0.3rem;
-    opacity: 0.55;
-  }
-  .row .del:hover{ opacity: 1; color: var(--margin-red); }
-
-  /* ---------- Empty / loading ---------- */
-  .empty-state, .loading-state{
-    text-align: center;
-    padding: 2.2rem 1rem;
-    color: var(--ink-soft);
-    font-size: 0.9rem;
-  }
-  .empty-state svg{ opacity: 0.5; margin-bottom: 0.6rem; }
-
-  /* ---------- Tabs ---------- */
+  /* ── Tabs ── */
   .tabs{
-    display:flex;
-    gap: 0.4rem;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 0.3rem;
-    margin-top: 1.1rem;
-    box-shadow: var(--shadow);
+    display:flex; gap:0.4rem; background:var(--card);
+    border:1px solid var(--line); border-radius:14px;
+    padding:0.3rem; margin-top:1.1rem; box-shadow:var(--shadow);
   }
   .tab{
-    flex: 1;
-    text-align: center;
-    padding: 0.55rem 0;
-    border-radius: 10px;
-    border: none;
-    background: transparent;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 0.88rem;
-    color: var(--ink-soft);
-    cursor: pointer;
+    flex:1; text-align:center; padding:0.55rem 0; border-radius:10px;
+    border:none; background:transparent; font-family:'Inter',sans-serif;
+    font-weight:600; font-size:0.88rem; color:var(--ink-soft); cursor:pointer;
   }
-  .tab.active{
-    background: var(--ink);
-    color: var(--card);
-  }
+  .tab.active{ background:var(--ink); color:var(--card); }
 
-  .custom-range{
-    display:flex;
-    align-items:center;
-    gap: 0.5rem;
-    margin-top: 0.8rem;
+  /* ── Entry card ── */
+  .entry-card{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:18px; padding:1.2rem 1.2rem 1.3rem;
+    margin-top:1.1rem; box-shadow:var(--shadow);
   }
-  .custom-range input[type="date"]{ flex: 1 1 auto; font-size: 0.85rem; padding: 0.45rem 0.6rem; }
-  .custom-range span{ font-size: 0.8rem; color: var(--ink-soft); }
+  .entry-card h2{ font-family:'Fraunces',serif; font-size:1.05rem; font-weight:600; margin:0 0 0.9rem; color:var(--ink); }
+  .field{ margin-bottom:0.85rem; display:block; }
+  .field-label{
+    display:block; font-size:0.72rem; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--ink-soft); margin-bottom:0.35rem;
+  }
+  .amount-input{
+    display:flex; align-items:center; background:var(--paper);
+    border:1.5px solid var(--line); border-radius:12px; padding:0.55rem 0.9rem;
+  }
+  .amount-input span{
+    font-family:'IBM Plex Mono',monospace; font-weight:600;
+    color:var(--margin-red); margin-right:0.4rem; font-size:1.1rem;
+  }
+  .amount-input input{
+    border:none; background:transparent; outline:none;
+    font-family:'IBM Plex Mono',monospace; font-weight:600;
+    font-size:1.15rem; color:var(--ink); width:100%;
+  }
+  input[type="text"],input[type="date"]{
+    width:100%; border:1.5px solid var(--line); background:var(--paper);
+    border-radius:12px; padding:0.6rem 0.9rem;
+    font-family:'Inter',sans-serif; font-size:1rem; color:var(--ink); outline:none;
+  }
+  input:focus-visible,button:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
 
-  .report-total{
-    margin-top: 1rem;
-    padding-top: 0.9rem;
-    border-top: 1px dashed var(--rule);
-    text-align: center;
+  .category-chips{ display:grid; grid-template-columns:repeat(4,1fr); gap:0.5rem; }
+  .chip{
+    border:1.5px solid var(--line); background:var(--paper); border-radius:12px;
+    padding:0.45rem 0.3rem; display:flex; flex-direction:column;
+    align-items:center; gap:0.3rem; cursor:pointer;
+    font-family:'Inter',sans-serif; font-size:0.68rem; color:var(--ink-soft);
+    transition:border-color 0.15s,background 0.15s;
   }
-  .report-total .r-label{
-    display:block;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--ink-soft);
+  .chip .stamp{
+    width:26px; height:26px; border-radius:50%; border:1.5px dashed currentColor;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:700; font-size:0.78rem; transform:rotate(-6deg);
   }
-  .report-total .r-amount{
-    display:block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 700;
-    font-size: 1.7rem;
-    color: var(--margin-red);
-    margin: 0.15rem 0;
-  }
-  .report-total .r-count{
-    font-size: 0.78rem;
-    color: var(--ink-soft);
-  }
+  .chip.active{ border-color:var(--ink); background:var(--margin-red-soft); color:var(--ink); font-weight:600; }
 
-  /* ---------- Error banner ---------- */
-  .err-banner{
-    background: var(--margin-red-soft);
-    border: 1px solid var(--margin-red);
-    color: var(--margin-red);
-    border-radius: 12px;
-    padding: 0.7rem 0.9rem;
-    font-size: 0.8rem;
-    margin-bottom: 1rem;
+  .when-row{ display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center; }
+  .when-chip{
+    border:1.5px solid var(--line); background:var(--paper);
+    border-radius:999px; padding:0.4rem 0.85rem; font-size:0.78rem;
+    color:var(--ink-soft); cursor:pointer; font-family:'Inter',sans-serif;
   }
+  .when-chip.active{ border-color:var(--ink); background:var(--ink); color:var(--card); font-weight:600; }
+  .date-pick{ display:none; flex:1 1 140px; padding:0.4rem 0.7rem; font-size:0.85rem; }
+  .date-pick.show{ display:block; }
+  .add-btn{
+    width:100%; margin-top:0.95rem; background:var(--ink); color:var(--card);
+    border:none; border-radius:12px; padding:0.75rem;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:0.95rem;
+    cursor:pointer; transition:transform 0.1s,background 0.15s;
+  }
+  .add-btn:active{ transform:scale(0.98); }
+  .add-btn:hover{ background:#1b2740; }
+  .add-btn:disabled{ opacity:0.6; cursor:not-allowed; }
 
-  /* ---------- Toast ---------- */
+  /* ── Method / Report cards ── */
+  .method-card{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:18px; padding:1.1rem 1.2rem 1.2rem;
+    margin-top:1.1rem; box-shadow:var(--shadow);
+  }
+  .method-card h2{ font-family:'Fraunces',serif; font-size:1.05rem; font-weight:600; margin:0 0 0.8rem; color:var(--ink); }
+  .method-row{ margin-bottom:0.65rem; }
+  .method-row:last-child{ margin-bottom:0; }
+  .method-row-top{ display:flex; align-items:center; margin-bottom:0.25rem; }
+  .method-row .dot{ width:8px; height:8px; border-radius:50%; margin-right:0.45rem; flex:0 0 auto; }
+  .method-row .m-label{ flex:1 1 auto; font-size:0.85rem; color:var(--ink); }
+  .method-row .m-amount{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:0.85rem; color:var(--ink); }
+  .method-bar{ height:5px; border-radius:4px; background:var(--line); overflow:hidden; }
+  .method-bar-fill{ height:100%; border-radius:4px; transition:width 0.3s ease; }
+  .method-empty{ font-size:0.85rem; color:var(--ink-soft); }
+  .row .cat .dot{ display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:4px; vertical-align:middle; }
+
+  /* Report */
+  .custom-range{ display:flex; align-items:center; gap:0.5rem; margin-top:0.8rem; }
+  .custom-range input[type="date"]{ flex:1 1 auto; font-size:0.85rem; padding:0.45rem 0.6rem; }
+  .custom-range span{ font-size:0.8rem; color:var(--ink-soft); }
+  .report-total{ margin-top:1rem; padding-top:0.9rem; border-top:1px dashed var(--rule); text-align:center; }
+  .report-total .r-label{ display:block; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); }
+  .report-total .r-amount{ display:block; font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:1.7rem; color:var(--margin-red); margin:0.15rem 0; }
+  .report-total .r-count{ font-size:0.78rem; color:var(--ink-soft); }
+
+  /* ── Ledger rows ── */
+  .ledger-list{ margin-top:1.6rem; }
+  .day-group{ margin-bottom:1.3rem; }
+  .day-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:0 0.2rem 0.4rem; border-bottom:1.5px solid var(--gold);
+  }
+  .day-head .day-label{ font-family:'Fraunces',serif; font-weight:600; font-size:0.92rem; color:var(--ink); }
+  .day-head .day-total{ font-family:'IBM Plex Mono',monospace; font-size:0.82rem; color:var(--ink-soft); }
+  .row{
+    position:relative; display:flex; align-items:center; gap:0.7rem;
+    padding:0.65rem 0.4rem 0.65rem 0.9rem; border-bottom:1px dashed var(--rule);
+  }
+  .row::before{
+    content:""; position:absolute; left:0; top:0; bottom:0;
+    width:2px; background:var(--margin-red); opacity:0.55;
+  }
+  .row .stamp{
+    flex:0 0 auto; width:30px; height:30px; border-radius:50%;
+    border:1.5px dashed currentColor; display:flex; align-items:center;
+    justify-content:center; font-family:'Fraunces',serif; font-weight:700;
+    font-size:0.85rem; transform:rotate(-5deg);
+  }
+  .row .desc{ flex:1 1 auto; min-width:0; }
+  .row .desc .note{ font-size:0.92rem; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .row .desc .cat{ font-size:0.7rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em; }
+  .row .amount{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:0.95rem; color:var(--margin-red); white-space:nowrap; }
+  .row .del{
+    flex:0 0 auto; background:none; border:none; color:var(--ink-soft);
+    font-size:1.1rem; line-height:1; cursor:pointer; padding:0.2rem 0.3rem; opacity:0.55;
+  }
+  .row .del:hover{ opacity:1; color:var(--margin-red); }
+
+  /* ── Empty / loading ── */
+  .empty-state,.loading-state{ text-align:center; padding:2.2rem 1rem; color:var(--ink-soft); font-size:0.9rem; }
+  .empty-state svg{ opacity:0.5; margin-bottom:0.6rem; }
+
+  /* ── Toast ── */
   .toast{
-    position: fixed;
-    left: 50%;
-    bottom: 1.4rem;
-    transform: translateX(-50%);
-    background: var(--ink);
-    color: var(--card);
-    padding: 0.65rem 1.1rem;
-    border-radius: 999px;
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-    z-index: 50;
-    max-width: 90vw;
+    position:fixed; left:50%; bottom:1.4rem; transform:translateX(-50%);
+    background:var(--ink); color:var(--card); padding:0.65rem 1.1rem;
+    border-radius:999px; font-size:0.85rem; display:flex; align-items:center;
+    gap:0.8rem; box-shadow:0 8px 24px rgba(0,0,0,0.25);
+    z-index:50; max-width:90vw;
   }
-  .toast button{
-    background: none;
-    border: none;
-    color: var(--gold);
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-family: 'Inter', sans-serif;
+  .toast button{ background:none; border:none; color:var(--gold); font-weight:600; cursor:pointer; font-size:0.85rem; font-family:'Inter',sans-serif; }
+
+  /* ── Error banner ── */
+  .err-banner{
+    background:var(--margin-red-soft); border:1px solid var(--margin-red);
+    color:var(--margin-red); border-radius:12px; padding:0.7rem 0.9rem;
+    font-size:0.8rem; margin-bottom:1rem;
   }
+
+  /* ── Sync indicator ── */
+  .sync-dot{
+    display:inline-block; width:7px; height:7px; border-radius:50%;
+    background:#3F6E3F; margin-left:0.4rem; vertical-align:middle;
+    transition:background 0.3s;
+  }
+  .sync-dot.saving{ background:var(--gold); }
+  .sync-dot.error{ background:var(--margin-red); }
 </style>
 </head>
 <body>
-<div class="app">
+
+<!-- ══════════ LOGIN SCREEN ══════════ -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <h1>Hisaab</h1>
+    <p class="sub">Personal Money Register</p>
+    <div class="brass-rule"></div>
+    <div class="login-field">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email">
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="login-btn" id="loginBtn">Sign in</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- ══════════ MAIN APP ══════════ -->
+<div class="app" id="mainApp" hidden>
   <div class="err-banner" id="errBanner" hidden></div>
 
   <header class="ledger-header">
+    <button class="logout-btn" id="logoutBtn">Sign out</button>
     <div class="date-stamp" id="dateStamp">—</div>
-    <h1>Hisaab</h1>
+    <h1>Hisaab <span class="sync-dot" id="syncDot" title="Saved"></span></h1>
     <p class="subtitle">your daily money register</p>
     <div class="brass-rule"></div>
     <div class="month-total">
@@ -545,71 +321,63 @@
     <button type="button" class="tab" data-tab="report">Report</button>
   </div>
 
+  <!-- LEDGER VIEW -->
   <div id="ledgerView">
+    <section class="method-card">
+      <h2>This month, by payment</h2>
+      <div id="methodRows"></div>
+    </section>
 
-  <section class="method-card">
-    <h2>This month, by payment</h2>
-    <div id="methodRows"></div>
-  </section>
-
-  <section class="entry-card">
-    <h2>Add an entry</h2>
-    <form id="entryForm">
-      <div class="field">
-        <span class="field-label">Amount</span>
-        <div class="amount-input">
-          <span>₹</span>
-          <input type="number" inputmode="decimal" min="0" step="0.01" id="amountInput" placeholder="0" required>
+    <section class="entry-card">
+      <h2>Add an entry</h2>
+      <form id="entryForm">
+        <div class="field">
+          <span class="field-label">Amount</span>
+          <div class="amount-input">
+            <span>₹</span>
+            <input type="number" inputmode="decimal" min="0" step="0.01" id="amountInput" placeholder="0" required>
+          </div>
         </div>
-      </div>
-
-      <div class="field">
-        <span class="field-label">Category</span>
-        <div class="category-chips" id="categoryChips"></div>
-      </div>
-
-      <div class="field">
-        <span class="field-label">Paid via</span>
-        <div class="category-chips" id="paymentChips"></div>
-      </div>
-
-      <div class="field">
-        <span class="field-label">Note (optional — what was it for?)</span>
-        <input type="text" id="noteInput" placeholder="e.g. lunch with Raj" maxlength="60">
-      </div>
-
-      <div class="field">
-        <span class="field-label">When</span>
-        <div class="when-row">
-          <button type="button" class="when-chip active" data-when="today">Today</button>
-          <button type="button" class="when-chip" data-when="yesterday">Yesterday</button>
-          <button type="button" class="when-chip" data-when="pick">Pick date</button>
-          <input type="date" class="date-pick" id="dateInput">
+        <div class="field">
+          <span class="field-label">Category</span>
+          <div class="category-chips" id="categoryChips"></div>
         </div>
-      </div>
+        <div class="field">
+          <span class="field-label">Paid via</span>
+          <div class="category-chips" id="paymentChips"></div>
+        </div>
+        <div class="field">
+          <span class="field-label">Note (optional)</span>
+          <input type="text" id="noteInput" placeholder="e.g. lunch, auto, groceries" maxlength="60">
+        </div>
+        <div class="field">
+          <span class="field-label">When</span>
+          <div class="when-row" id="whenRow">
+            <button type="button" class="when-chip active" data-when="today">Today</button>
+            <button type="button" class="when-chip" data-when="yesterday">Yesterday</button>
+            <button type="button" class="when-chip" data-when="pick">Pick date</button>
+            <input type="date" class="date-pick" id="dateInput">
+          </div>
+        </div>
+        <button type="submit" class="add-btn" id="addBtn">Add to hisaab</button>
+      </form>
+    </section>
 
-      <button type="submit" class="add-btn">Add to hisaab</button>
-    </form>
-  </section>
-
-  <section class="ledger-list" id="ledgerList"></section>
-
-  <div class="empty-state" id="emptyState" hidden>
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="7" y="5" width="26" height="30" rx="2" stroke="#5B6478" stroke-width="1.5"/>
-      <line x1="12" y1="13" x2="28" y2="13" stroke="#5B6478" stroke-width="1.5"/>
-      <line x1="12" y1="19" x2="28" y2="19" stroke="#5B6478" stroke-width="1.5"/>
-      <line x1="12" y1="25" x2="22" y2="25" stroke="#5B6478" stroke-width="1.5"/>
-    </svg>
-    <div>Your hisaab is empty. Add your first entry above —<br>it takes two taps.</div>
+    <section class="ledger-list" id="ledgerList"></section>
+    <div class="empty-state" id="emptyState" hidden>
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <rect x="7" y="5" width="26" height="30" rx="2" stroke="#5B6478" stroke-width="1.5"/>
+        <line x1="12" y1="13" x2="28" y2="13" stroke="#5B6478" stroke-width="1.5"/>
+        <line x1="12" y1="19" x2="28" y2="19" stroke="#5B6478" stroke-width="1.5"/>
+        <line x1="12" y1="25" x2="22" y2="25" stroke="#5B6478" stroke-width="1.5"/>
+      </svg>
+      <div>Your hisaab is empty.<br>Add your first entry above.</div>
+    </div>
+    <div class="loading-state" id="loadingState">Opening your ledger…</div>
   </div>
 
-  <div class="loading-state" id="loadingState">Opening your ledger…</div>
-
-  </div>
-
+  <!-- REPORT VIEW -->
   <div id="reportView" hidden>
-
     <section class="entry-card">
       <h2>Report period</h2>
       <div class="when-row" id="periodChips">
@@ -629,452 +397,421 @@
         <span class="r-count" id="reportCount">0 entries</span>
       </div>
     </section>
-
     <section class="method-card">
       <h2>By category</h2>
       <div id="reportCategoryRows"></div>
     </section>
-
     <section class="method-card">
       <h2>By payment</h2>
       <div id="reportPaymentRows"></div>
     </section>
-
   </div>
 
-</div>
+</div><!-- end .app -->
 
 <div class="toast" id="toast" hidden></div>
 
-<script>
-function showFatalError(msg){
-  const b = document.getElementById('errBanner');
-  if (!b) return;
-  b.hidden = false;
-  b.textContent = 'This page hit a snag (' + msg + '). Try closing and reopening it.';
+<!-- ══════════ FIREBASE ══════════ -->
+<script type="module">
+import { initializeApp }            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+                                    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, onValue, set, remove }
+                                    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// ── Firebase config ──
+const firebaseConfig = {
+  apiKey: "AIzaSyBT7zElD4wam5Om9o7WYT2OCFUfRm3Jg5w",
+  authDomain: "hisaab-personal.firebaseapp.com",
+  databaseURL: "https://hisaab-personal-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "hisaab-personal",
+  storageBucket: "hisaab-personal.firebasestorage.app",
+  messagingSenderId: "424165911844",
+  appId: "1:424165911844:web:f6a9b889af19e2520097b1"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getDatabase(app);
+
+// ── Data ──
+const CATEGORIES = [
+  { key:'food',      label:'Food',             letter:'F', color:'#7A5230' },
+  { key:'transport', label:'Transport',         letter:'T', color:'#2C5F6F' },
+  { key:'shopping',  label:'Shopping',          letter:'S', color:'#7A3B6D' },
+  { key:'bills',     label:'Bills',             letter:'B', color:'#8B2635' },
+  { key:'health',    label:'Health',            letter:'H', color:'#3F6E3F' },
+  { key:'fun',       label:'Fun',               letter:'E', color:'#A8742A' },
+  { key:'travel',    label:'Travel',            letter:'V', color:'#3A4F8B' },
+  { key:'other',     label:'Other',             letter:'O', color:'#5B6478' },
+];
+const PAYMENT_METHODS = [
+  { key:'cash',    label:'Cash',             letter:'₹', color:'#3F6E3F' },
+  { key:'upi',     label:'UPI (HDFC)',        letter:'U', color:'#2C5F6F' },
+  { key:'regalia', label:'Business Regalia',  letter:'R', color:'#26344A' },
+  { key:'swiggy',  label:'Swiggy Card',       letter:'S', color:'#E5631E' },
+];
+const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS   = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// ── Element refs ──
+const $ = id => document.getElementById(id);
+const loginWrap   = $('loginWrap');
+const mainApp     = $('mainApp');
+const loginEmail  = $('loginEmail');
+const loginPass   = $('loginPass');
+const loginBtn    = $('loginBtn');
+const loginErr    = $('loginErr');
+const logoutBtn   = $('logoutBtn');
+const errBanner   = $('errBanner');
+const syncDot     = $('syncDot');
+const dateStamp   = $('dateStamp');
+const monthTotal  = $('monthTotal');
+const tabs        = document.querySelectorAll('.tab');
+const ledgerView  = $('ledgerView');
+const reportView  = $('reportView');
+const methodRows  = $('methodRows');
+const entryForm   = $('entryForm');
+const amountInput = $('amountInput');
+const noteInput   = $('noteInput');
+const catChips    = $('categoryChips');
+const payChips    = $('paymentChips');
+const whenRow     = $('whenRow');
+const dateInput   = $('dateInput');
+const addBtn      = $('addBtn');
+const ledgerList  = $('ledgerList');
+const emptyState  = $('emptyState');
+const loadingState= $('loadingState');
+const periodChips = $('periodChips');
+const customRange = $('customRange');
+const reportFrom  = $('reportFrom');
+const reportTo    = $('reportTo');
+const reportTotal = $('reportTotal');
+const reportCount = $('reportCount');
+const reportCatRows = $('reportCategoryRows');
+const reportPayRows = $('reportPaymentRows');
+const toast       = $('toast');
+
+// ── State ──
+let entries = [];
+let selectedCategory = 'food';
+let selectedPayment  = 'cash';
+let selectedDate     = todayStr();
+let reportPeriod     = 'month';
+let undoTimer        = null;
+let currentUid       = null;
+let dbRef            = null;
+
+// ── Helpers ──
+function todayStr(d){
+  const dt = d ? new Date(d) : new Date();
+  return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
 }
-window.addEventListener('error', function(e){ showFatalError(e.message); });
-window.addEventListener('unhandledrejection', function(e){
-  showFatalError(e.reason && e.reason.message ? e.reason.message : String(e.reason));
+function yesterdayStr(){
+  const dt = new Date(); dt.setDate(dt.getDate()-1); return todayStr(dt);
+}
+function indianGroup(s){
+  let r='', i=s.length;
+  while(i>2){ r=','+s.slice(i-2,i)+r; i-=2; }
+  return s.slice(0,i)+r;
+}
+function fmtINR(n){
+  n=Number(n); if(!isFinite(n)) n=0;
+  const neg=n<0; n=Math.abs(n);
+  const parts=Math.round(n*100)/100..toFixed(2).split('.');
+  const ip=parts[0], dp=parts[1];
+  const grouped = ip.length<=3 ? ip : indianGroup(ip.slice(0,-3))+','+ip.slice(-3);
+  return (neg?'-':'')+'\u20B9'+grouped+(dp==='00'?'':'.'+dp);
+}
+function dayLabel(ds){
+  if(ds===todayStr()) return 'Today';
+  if(ds===yesterdayStr()) return 'Yesterday';
+  const dt=new Date(ds+'T00:00:00');
+  return `${WEEKDAYS[dt.getDay()]}, ${dt.getDate()} ${MONTHS[dt.getMonth()]}`;
+}
+function catInfo(k){ return CATEGORIES.find(c=>c.key===k)||CATEGORIES[CATEGORIES.length-1]; }
+function payInfo(k){ return PAYMENT_METHODS.find(p=>p.key===k)||PAYMENT_METHODS[0]; }
+function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function shiftYM(n){
+  const dt=new Date(); dt.setDate(1); dt.setMonth(dt.getMonth()-n);
+  return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
+}
+function setSyncDot(state){ syncDot.className='sync-dot '+(state||''); }
+
+// ── Firebase Auth ──
+loginBtn.addEventListener('click', async ()=>{
+  loginErr.textContent='';
+  loginBtn.disabled=true; loginBtn.textContent='Signing in…';
+  try{
+    await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPass.value);
+  }catch(e){
+    loginErr.textContent = e.code==='auth/invalid-credential'
+      ? 'Wrong email or password.' : e.message;
+    loginBtn.disabled=false; loginBtn.textContent='Sign in';
+  }
+});
+loginEmail.addEventListener('keydown', e=>{ if(e.key==='Enter') loginPass.focus(); });
+loginPass.addEventListener('keydown',  e=>{ if(e.key==='Enter') loginBtn.click(); });
+
+logoutBtn.addEventListener('click', ()=> signOut(auth));
+
+onAuthStateChanged(auth, user=>{
+  if(user){
+    currentUid=user.uid;
+    loginWrap.hidden=true;
+    mainApp.hidden=false;
+    loginBtn.disabled=false; loginBtn.textContent='Sign in';
+    loginPass.value='';
+    initDB();
+  } else {
+    currentUid=null; dbRef=null; entries=[];
+    mainApp.hidden=true; loginWrap.hidden=false;
+  }
 });
 
-(function(){
-  const CATEGORIES = [
-    { key:'food',     label:'Food',         letter:'F', color:'#7A5230' },
-    { key:'transport', label:'Transport',   letter:'T', color:'#2C5F6F' },
-    { key:'shopping', label:'Shopping',     letter:'S', color:'#7A3B6D' },
-    { key:'bills',    label:'Bills',        letter:'B', color:'#8B2635' },
-    { key:'health',   label:'Health',       letter:'H', color:'#3F6E3F' },
-    { key:'fun',      label:'Fun',          letter:'E', color:'#A8742A' },
-    { key:'travel',   label:'Travel',       letter:'V', color:'#3A4F8B' },
-    { key:'other',    label:'Other',        letter:'O', color:'#5B6478' },
-  ];
+// ── Firebase Realtime DB ──
+function initDB(){
+  dbRef = ref(db, `users/${currentUid}/expenses`);
+  loadingState.hidden=false;
+  onValue(dbRef, snap=>{
+    const data=snap.val();
+    entries = data ? Object.values(data) : [];
+    entries.sort((a,b)=>b.createdAt-a.createdAt);
+    loadingState.hidden=true;
+    renderAll();
+    setSyncDot('');
+  }, err=>{
+    showBanner('Could not load data: '+err.message);
+    loadingState.hidden=true;
+  });
+}
 
-  const PAYMENT_METHODS = [
-    { key:'cash',    label:'Cash',              letter:'₹', color:'#3F6E3F' },
-    { key:'upi',     label:'UPI (HDFC)',        letter:'U', color:'#2C5F6F' },
-    { key:'regalia', label:'Business Regalia',  letter:'R', color:'#26344A' },
-    { key:'swiggy',  label:'Swiggy Card',       letter:'S', color:'#E5631E' },
-  ];
+async function saveEntry(entry){
+  setSyncDot('saving');
+  try{
+    await set(ref(db,`users/${currentUid}/expenses/${entry.id}`), entry);
+    setSyncDot('');
+  }catch(e){
+    setSyncDot('error');
+    showToast('Save failed — check connection.');
+  }
+}
 
-  const els = {
-    form: document.getElementById('entryForm'),
-    amount: document.getElementById('amountInput'),
-    note: document.getElementById('noteInput'),
-    chips: document.getElementById('categoryChips'),
-    paymentChips: document.getElementById('paymentChips'),
-    methodRows: document.getElementById('methodRows'),
-    tabs: document.querySelectorAll('.tab'),
-    ledgerView: document.getElementById('ledgerView'),
-    reportView: document.getElementById('reportView'),
-    periodChips: document.getElementById('periodChips'),
-    customRange: document.getElementById('customRange'),
-    reportFrom: document.getElementById('reportFrom'),
-    reportTo: document.getElementById('reportTo'),
-    reportTotal: document.getElementById('reportTotal'),
-    reportCount: document.getElementById('reportCount'),
-    reportCategoryRows: document.getElementById('reportCategoryRows'),
-    reportPaymentRows: document.getElementById('reportPaymentRows'),
-    whenRow: document.querySelector('#entryForm .when-row'),
-    dateInput: document.getElementById('dateInput'),
-    list: document.getElementById('ledgerList'),
-    monthTotal: document.getElementById('monthTotal'),
-    dateStamp: document.getElementById('dateStamp'),
-    emptyState: document.getElementById('emptyState'),
-    loadingState: document.getElementById('loadingState'),
-    toast: document.getElementById('toast'),
+async function deleteEntryDB(id){
+  setSyncDot('saving');
+  try{
+    await remove(ref(db,`users/${currentUid}/expenses/${id}`));
+    setSyncDot('');
+  }catch(e){
+    setSyncDot('error');
+    showToast('Delete failed — check connection.');
+  }
+}
+
+// ── Render ──
+function renderAll(){ renderList(); renderReport(); }
+
+function renderChipsInto(container, items, selectedKey, onSelect){
+  container.innerHTML = items.map(c=>`
+    <div class="chip ${c.key===selectedKey?'active':''}" data-key="${c.key}" style="color:${c.color}">
+      <span class="stamp">${c.letter}</span>
+      <span>${c.label}</span>
+    </div>`).join('');
+  container.querySelectorAll('.chip').forEach(el=>{
+    el.addEventListener('click',()=>{ onSelect(el.dataset.key); renderChipsInto(container,items,el.dataset.key,onSelect); });
+  });
+}
+
+function renderBreakdownInto(container, totals, infoFn, emptyMsg){
+  const keys=Object.keys(totals).sort((a,b)=>totals[b]-totals[a]);
+  if(!keys.length){ container.innerHTML=`<div class="method-empty">${emptyMsg}</div>`; return; }
+  const max=Math.max(...keys.map(k=>totals[k]));
+  container.innerHTML=keys.map(k=>{
+    const info=infoFn(k), pct=max?Math.round(totals[k]/max*100):0;
+    return `<div class="method-row">
+      <div class="method-row-top">
+        <span class="dot" style="background:${info.color}"></span>
+        <span class="m-label">${info.label}</span>
+        <span class="m-amount">${fmtINR(totals[k])}</span>
+      </div>
+      <div class="method-bar"><div class="method-bar-fill" style="width:${pct}%;background:${info.color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function computeTotals(list,keyFn){
+  const t={};
+  list.forEach(e=>{ const k=keyFn(e); t[k]=(t[k]||0)+e.amount; });
+  return t;
+}
+
+function renderList(){
+  const ym=shiftYM(0);
+  const monthEntries=entries.filter(e=>e.date.slice(0,7)===ym);
+  monthTotal.textContent=fmtINR(monthEntries.reduce((s,e)=>s+e.amount,0));
+  renderBreakdownInto(methodRows, computeTotals(monthEntries,e=>e.payment), payInfo, 'No spends logged yet this month.');
+
+  if(!entries.length){ emptyState.hidden=false; ledgerList.innerHTML=''; return; }
+  emptyState.hidden=true;
+
+  const groups={};
+  entries.forEach(e=>{ (groups[e.date]=groups[e.date]||[]).push(e); });
+  const dates=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
+
+  ledgerList.innerHTML=dates.map(date=>{
+    const items=groups[date].slice().sort((a,b)=>b.createdAt-a.createdAt);
+    const dayTotal=items.reduce((s,e)=>s+e.amount,0);
+    const rows=items.map(e=>{
+      const c=catInfo(e.category), p=payInfo(e.payment);
+      return `<div class="row" data-id="${e.id}">
+        <span class="stamp" style="color:${c.color}">${c.letter}</span>
+        <span class="desc">
+          <div class="note">${esc(e.note||c.label)}</div>
+          <div class="cat"><span class="dot" style="background:${p.color}"></span>${c.label} · ${p.label}</div>
+        </span>
+        <span class="amount">${fmtINR(e.amount)}</span>
+        <button class="del" data-id="${e.id}" aria-label="Delete">×</button>
+      </div>`;
+    }).join('');
+    return `<div class="day-group">
+      <div class="day-head">
+        <span class="day-label">${dayLabel(date)}</span>
+        <span class="day-total">${fmtINR(dayTotal)}</span>
+      </div>${rows}</div>`;
+  }).join('');
+
+  ledgerList.querySelectorAll('.del').forEach(btn=>{
+    btn.addEventListener('click',()=>deleteEntry(btn.dataset.id));
+  });
+}
+
+function filterEntriesForPeriod(){
+  if(reportPeriod==='month')     return entries.filter(e=>e.date.slice(0,7)===shiftYM(0));
+  if(reportPeriod==='lastmonth') return entries.filter(e=>e.date.slice(0,7)===shiftYM(1));
+  if(reportPeriod==='custom'){
+    const from=reportFrom.value||'0000-01-01', to=reportTo.value||'9999-12-31';
+    return entries.filter(e=>e.date>=from&&e.date<=to);
+  }
+  return entries.slice();
+}
+
+function renderReport(){
+  const list=filterEntriesForPeriod();
+  const total=list.reduce((s,e)=>s+e.amount,0);
+  reportTotal.textContent=fmtINR(total);
+  reportCount.textContent=list.length+(list.length===1?' entry':' entries');
+  renderBreakdownInto(reportCatRows, computeTotals(list,e=>e.category), catInfo, 'No spends in this period.');
+  renderBreakdownInto(reportPayRows, computeTotals(list,e=>e.payment),  payInfo, 'No spends in this period.');
+}
+
+// ── Entry actions ──
+async function deleteEntry(id){
+  const idx=entries.findIndex(e=>e.id===id);
+  if(idx===-1) return;
+  const [removed]=entries.splice(idx,1);
+  renderAll();
+  await deleteEntryDB(id);
+  showToast('Entry removed', async()=>{
+    entries.push(removed);
+    renderAll();
+    await saveEntry(removed);
+  });
+}
+
+// ── Form submit ──
+entryForm.addEventListener('submit', async e=>{
+  e.preventDefault();
+  const amt=parseFloat(amountInput.value);
+  if(!amt||amt<=0) return;
+  addBtn.disabled=true;
+  const entry={
+    id: Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+    amount: amt,
+    category: selectedCategory,
+    payment: selectedPayment,
+    note: noteInput.value.trim().slice(0,60),
+    date: selectedDate,
+    createdAt: Date.now(),
   };
+  entries.unshift(entry);
+  renderAll();
+  await saveEntry(entry);
+  addBtn.disabled=false;
+  showToast(`Added ${fmtINR(amt)} · ${catInfo(selectedCategory).label}`);
+  amountInput.value=''; noteInput.value='';
+  whenRow.querySelector('[data-when="today"]').click();
+  amountInput.focus();
+});
 
-  let entries = [];
-  let selectedCategory = 'food';
-  let selectedPayment = 'cash';
-  let reportPeriod = 'month';
-  let selectedDate = todayStr();
-  let undoTimer = null;
+// ── Tab switching ──
+tabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const which=tab.dataset.tab;
+    ledgerView.hidden=which!=='ledger';
+    reportView.hidden=which!=='report';
+    if(which==='report') renderReport();
+  });
+});
 
-  function todayStr(d){
-    const dt = d ? new Date(d) : new Date();
-    const y = dt.getFullYear();
-    const m = String(dt.getMonth()+1).padStart(2,'0');
-    const day = String(dt.getDate()).padStart(2,'0');
-    return `${y}-${m}-${day}`;
-  }
-  function yesterdayStr(){
-    const dt = new Date();
-    dt.setDate(dt.getDate()-1);
-    return todayStr(dt);
-  }
-  function indianGroup(s){
-    let result = '';
-    let i = s.length;
-    while (i > 2){
-      result = ',' + s.slice(i-2, i) + result;
-      i -= 2;
+// ── Period chips ──
+periodChips.querySelectorAll('.when-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    periodChips.querySelectorAll('.when-chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    reportPeriod=chip.dataset.period;
+    customRange.hidden=reportPeriod!=='custom';
+    if(reportPeriod==='custom'){
+      if(!reportFrom.value) reportFrom.value=todayStr();
+      if(!reportTo.value)   reportTo.value=todayStr();
     }
-    return s.slice(0, i) + result;
-  }
-  function fmtINR(n){
-    n = Number(n);
-    if (!isFinite(n)) n = 0;
-    const neg = n < 0;
-    n = Math.abs(n);
-    const rounded = Math.round(n * 100) / 100;
-    const parts = rounded.toFixed(2).split('.');
-    const intPart = parts[0], decPart = parts[1];
-    let grouped;
-    if (intPart.length <= 3){
-      grouped = intPart;
-    } else {
-      grouped = indianGroup(intPart.slice(0, -3)) + ',' + intPart.slice(-3);
-    }
-    return (neg ? '-' : '') + '₹' + grouped + (decPart === '00' ? '' : '.' + decPart);
-  }
-  function catInfo(key){
-    return CATEGORIES.find(c => c.key === key) || CATEGORIES[CATEGORIES.length-1];
-  }
-  function payInfo(key){
-    return PAYMENT_METHODS.find(p => p.key === key) || PAYMENT_METHODS[0];
-  }
-  const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-  function dayLabel(dateStr){
-    if (dateStr === todayStr()) return 'Today';
-    if (dateStr === yesterdayStr()) return 'Yesterday';
-    const dt = new Date(dateStr + 'T00:00:00');
-    return `${WEEKDAYS[dt.getDay()]}, ${dt.getDate()} ${MONTHS[dt.getMonth()]}`;
-  }
-
-  // ---------- render ----------
-  function renderChips(){
-    els.chips.innerHTML = CATEGORIES.map(c => `
-      <div class="chip ${c.key===selectedCategory?'active':''}" data-cat="${c.key}" style="color:${c.color}">
-        <span class="stamp">${c.letter}</span>
-        <span>${c.label}</span>
-      </div>
-    `).join('');
-    els.chips.querySelectorAll('.chip').forEach(el=>{
-      el.addEventListener('click', ()=>{
-        selectedCategory = el.dataset.cat;
-        renderChips();
-      });
-    });
-  }
-
-  function renderPaymentChips(){
-    els.paymentChips.innerHTML = PAYMENT_METHODS.map(p => `
-      <div class="chip ${p.key===selectedPayment?'active':''}" data-pay="${p.key}" style="color:${p.color}">
-        <span class="stamp">${p.letter}</span>
-        <span>${p.label}</span>
-      </div>
-    `).join('');
-    els.paymentChips.querySelectorAll('.chip').forEach(el=>{
-      el.addEventListener('click', ()=>{
-        selectedPayment = el.dataset.pay;
-        renderPaymentChips();
-      });
-    });
-  }
-
-  function renderDateStamp(){
-    const dt = new Date();
-    const dd = String(dt.getDate()).padStart(2,'0');
-    els.dateStamp.innerHTML = `${dd}<br>${MONTHS[dt.getMonth()]}<br>${dt.getFullYear()}`;
-  }
-
-  function computeTotals(list, keyFn){
-    const totals = {};
-    list.forEach(e => {
-      const k = keyFn(e);
-      totals[k] = (totals[k] || 0) + e.amount;
-    });
-    return totals;
-  }
-
-  function renderBreakdownInto(container, totals, infoFn, emptyMsg){
-    const keys = Object.keys(totals).sort((a,b) => totals[b] - totals[a]);
-    if (keys.length === 0){
-      container.innerHTML = `<div class="method-empty">${emptyMsg}</div>`;
-      return;
-    }
-    const max = Math.max(...keys.map(k => totals[k]));
-    container.innerHTML = keys.map(k => {
-      const info = infoFn(k);
-      const pct = max ? Math.round((totals[k] / max) * 100) : 0;
-      return `
-        <div class="method-row">
-          <div class="method-row-top">
-            <span class="dot" style="background:${info.color}"></span>
-            <span class="m-label">${info.label}</span>
-            <span class="m-amount">${fmtINR(totals[k])}</span>
-          </div>
-          <div class="method-bar"><div class="method-bar-fill" style="width:${pct}%; background:${info.color}"></div></div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function renderMethodSummary(){
-    const ym = todayStr().slice(0,7);
-    const monthEntries = entries.filter(e => e.date.slice(0,7) === ym);
-    const totals = computeTotals(monthEntries, e => e.payment);
-    renderBreakdownInto(els.methodRows, totals, payInfo, 'No spends logged yet this month.');
-  }
-
-  // ---------- report ----------
-  function shiftYM(monthsAgo){
-    const dt = new Date();
-    dt.setDate(1);
-    dt.setMonth(dt.getMonth() - monthsAgo);
-    const y = dt.getFullYear();
-    const m = String(dt.getMonth()+1).padStart(2,'0');
-    return `${y}-${m}`;
-  }
-
-  function filterEntriesForPeriod(){
-    if (reportPeriod === 'month'){
-      const ym = shiftYM(0);
-      return entries.filter(e => e.date.slice(0,7) === ym);
-    }
-    if (reportPeriod === 'lastmonth'){
-      const ym = shiftYM(1);
-      return entries.filter(e => e.date.slice(0,7) === ym);
-    }
-    if (reportPeriod === 'custom'){
-      const from = els.reportFrom.value || '0000-01-01';
-      const to = els.reportTo.value || '9999-12-31';
-      return entries.filter(e => e.date >= from && e.date <= to);
-    }
-    return entries.slice(); // all time
-  }
-
-  function renderReport(){
-    const list = filterEntriesForPeriod();
-    const total = list.reduce((s,e) => s + e.amount, 0);
-    els.reportTotal.textContent = fmtINR(total);
-    els.reportCount.textContent = list.length + (list.length === 1 ? ' entry' : ' entries');
-    renderBreakdownInto(els.reportCategoryRows, computeTotals(list, e => e.category), catInfo, 'No spends in this period.');
-    renderBreakdownInto(els.reportPaymentRows, computeTotals(list, e => e.payment), payInfo, 'No spends in this period.');
-  }
-
-  function renderList(){
-    if (entries.length === 0){
-      els.list.innerHTML = '';
-      els.emptyState.hidden = false;
-      els.monthTotal.textContent = fmtINR(0);
-      renderMethodSummary();
-      renderReport();
-      return;
-    }
-    els.emptyState.hidden = true;
-
-    const groups = {};
-    entries.forEach(e => {
-      (groups[e.date] = groups[e.date] || []).push(e);
-    });
-    const dates = Object.keys(groups).sort((a,b)=> b.localeCompare(a));
-
-    els.list.innerHTML = dates.map(date => {
-      const items = groups[date].slice().sort((a,b)=> b.createdAt - a.createdAt);
-      const dayTotal = items.reduce((s,e)=> s + e.amount, 0);
-      const rows = items.map(e => {
-        const c = catInfo(e.category);
-        const p = payInfo(e.payment);
-        return `
-          <div class="row" data-id="${e.id}">
-            <span class="stamp" style="color:${c.color}">${c.letter}</span>
-            <span class="desc">
-              <div class="note">${escapeHtml(e.note || c.label)}</div>
-              <div class="cat"><span class="dot" style="background:${p.color}"></span>${c.label} · ${p.label}</div>
-            </span>
-            <span class="amount">${fmtINR(e.amount)}</span>
-            <button class="del" data-id="${e.id}" aria-label="Delete entry">×</button>
-          </div>
-        `;
-      }).join('');
-      return `
-        <div class="day-group">
-          <div class="day-head">
-            <span class="day-label">${dayLabel(date)}</span>
-            <span class="day-total">${fmtINR(dayTotal)}</span>
-          </div>
-          ${rows}
-        </div>
-      `;
-    }).join('');
-
-    els.list.querySelectorAll('.del').forEach(btn=>{
-      btn.addEventListener('click', ()=> deleteEntry(btn.dataset.id));
-    });
-
-    const ym = todayStr().slice(0,7);
-    const monthSum = entries.filter(e => e.date.slice(0,7) === ym)
-                             .reduce((s,e)=> s + e.amount, 0);
-    els.monthTotal.textContent = fmtINR(monthSum);
-    renderMethodSummary();
     renderReport();
-  }
-
-  function escapeHtml(s){
-    const d = document.createElement('div');
-    d.textContent = s;
-    return d.innerHTML;
-  }
-
-  // ---------- storage ----------
-  async function loadEntries(){
-    try{
-      const res = await window.storage.get('expenses', false);
-      entries = res && res.value ? JSON.parse(res.value) : [];
-    }catch(err){
-      entries = [];
-    }
-    els.loadingState.hidden = true;
-    renderList();
-  }
-
-  async function saveEntries(){
-    try{
-      await window.storage.set('expenses', JSON.stringify(entries), false);
-    }catch(err){
-      showToast('Could not save — try again.');
-    }
-  }
-
-  // ---------- actions ----------
-  function showToast(msg, undoFn){
-    clearTimeout(undoTimer);
-    els.toast.innerHTML = '';
-    const span = document.createElement('span');
-    span.textContent = msg;
-    els.toast.appendChild(span);
-    if (undoFn){
-      const btn = document.createElement('button');
-      btn.textContent = 'Undo';
-      btn.addEventListener('click', ()=>{
-        undoFn();
-        els.toast.hidden = true;
-      });
-      els.toast.appendChild(btn);
-    }
-    els.toast.hidden = false;
-    undoTimer = setTimeout(()=>{ els.toast.hidden = true; }, 4500);
-  }
-
-  async function deleteEntry(id){
-    const idx = entries.findIndex(e => e.id === id);
-    if (idx === -1) return;
-    const [removed] = entries.splice(idx, 1);
-    renderList();
-    await saveEntries();
-    showToast('Entry removed', async ()=>{
-      entries.push(removed);
-      renderList();
-      await saveEntries();
-    });
-  }
-
-  els.tabs.forEach(tab=>{
-    tab.addEventListener('click', ()=>{
-      els.tabs.forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      const which = tab.dataset.tab;
-      els.ledgerView.hidden = which !== 'ledger';
-      els.reportView.hidden = which !== 'report';
-      if (which === 'report') renderReport();
-    });
   });
+});
+reportFrom.addEventListener('change', renderReport);
+reportTo.addEventListener('change',   renderReport);
 
-  els.periodChips.querySelectorAll('.when-chip').forEach(chip=>{
-    chip.addEventListener('click', ()=>{
-      els.periodChips.querySelectorAll('.when-chip').forEach(c=>c.classList.remove('active'));
-      chip.classList.add('active');
-      reportPeriod = chip.dataset.period;
-      els.customRange.hidden = reportPeriod !== 'custom';
-      if (reportPeriod === 'custom'){
-        if (!els.reportFrom.value) els.reportFrom.value = todayStr();
-        if (!els.reportTo.value) els.reportTo.value = todayStr();
-      }
-      renderReport();
-    });
+// ── When row ──
+whenRow.querySelectorAll('.when-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    whenRow.querySelectorAll('.when-chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    const when=chip.dataset.when;
+    if(when==='today'){ selectedDate=todayStr(); dateInput.classList.remove('show'); }
+    else if(when==='yesterday'){ selectedDate=yesterdayStr(); dateInput.classList.remove('show'); }
+    else{ dateInput.classList.add('show'); dateInput.value=dateInput.value||todayStr(); selectedDate=dateInput.value; dateInput.focus(); }
   });
-  els.reportFrom.addEventListener('change', renderReport);
-  els.reportTo.addEventListener('change', renderReport);
+});
+dateInput.addEventListener('change',()=>{ selectedDate=dateInput.value||todayStr(); });
 
-  els.whenRow.querySelectorAll('.when-chip').forEach(chip=>{
-    chip.addEventListener('click', ()=>{
-      els.whenRow.querySelectorAll('.when-chip').forEach(c=>c.classList.remove('active'));
-      chip.classList.add('active');
-      const when = chip.dataset.when;
-      if (when === 'today'){
-        selectedDate = todayStr();
-        els.dateInput.classList.remove('show');
-      } else if (when === 'yesterday'){
-        selectedDate = yesterdayStr();
-        els.dateInput.classList.remove('show');
-      } else {
-        els.dateInput.classList.add('show');
-        els.dateInput.value = els.dateInput.value || todayStr();
-        selectedDate = els.dateInput.value;
-        els.dateInput.focus();
-      }
-    });
-  });
-  els.dateInput.addEventListener('change', ()=>{
-    selectedDate = els.dateInput.value || todayStr();
-  });
+// ── Toast ──
+function showToast(msg, undoFn){
+  clearTimeout(undoTimer);
+  toast.innerHTML='';
+  const s=document.createElement('span'); s.textContent=msg; toast.appendChild(s);
+  if(undoFn){
+    const b=document.createElement('button'); b.textContent='Undo';
+    b.addEventListener('click',()=>{ undoFn(); toast.hidden=true; });
+    toast.appendChild(b);
+  }
+  toast.hidden=false;
+  undoTimer=setTimeout(()=>{ toast.hidden=true; },4500);
+}
 
-  els.form.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const amt = parseFloat(els.amount.value);
-    if (!amt || amt <= 0) return;
-    const entry = {
-      id: Date.now().toString(36) + Math.random().toString(36).slice(2,7),
-      amount: amt,
-      category: selectedCategory,
-      payment: selectedPayment,
-      note: els.note.value.trim().slice(0,60),
-      date: selectedDate,
-      createdAt: Date.now(),
-    };
-    entries.push(entry);
-    renderList();
-    await saveEntries();
+function showBanner(msg){ errBanner.hidden=false; errBanner.textContent=msg; }
 
-    const c = catInfo(selectedCategory);
-    showToast(`Added ${fmtINR(amt)} for ${c.label}`);
+// ── Date stamp ──
+function renderDateStamp(){
+  const dt=new Date();
+  dateStamp.innerHTML=`${String(dt.getDate()).padStart(2,'0')}<br>${MONTHS[dt.getMonth()]}<br>${dt.getFullYear()}`;
+}
 
-    els.amount.value = '';
-    els.note.value = '';
-    els.whenRow.querySelector('[data-when="today"]').click();
-    els.amount.focus();
-  });
+// ── Init chips on load ──
+renderDateStamp();
+renderChipsInto(catChips, CATEGORIES, selectedCategory, k=>{ selectedCategory=k; });
+renderChipsInto(payChips, PAYMENT_METHODS, selectedPayment, k=>{ selectedPayment=k; });
 
-  renderChips();
-  renderPaymentChips();
-  renderDateStamp();
-  loadEntries();
-})();
 </script>
 </body>
 </html>
