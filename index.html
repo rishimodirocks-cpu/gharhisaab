@@ -2,353 +2,324 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hisaab — Personal Money Register</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Hisaab — Personal Cashbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --paper:#EFE6D5; --paper-deep:#E6DAC4; --rule:#AEBBD1;
-    --margin-red:#8B2635; --margin-red-soft:rgba(139,38,53,0.12);
-    --ink:#26344A; --ink-soft:#5B6478; --gold:#B8924A;
-    --card:#FBF7EC; --line:rgba(38,52,74,0.12);
-    --shadow:0 6px 18px rgba(38,52,74,0.10);
-  }
-  *{ box-sizing:border-box; }
-  html,body{ margin:0; padding:0; }
-  body{
-    background: radial-gradient(ellipse at top, var(--paper-deep) 0%, var(--paper) 60%);
-    min-height:100vh; font-family:'Inter',sans-serif;
-    color:var(--ink); -webkit-font-smoothing:antialiased;
-  }
+:root{
+  --paper:#EFE6D5; --paper-deep:#E6DAC4; --rule:#AEBBD1;
+  --red:#8B2635; --red-soft:rgba(139,38,53,0.12);
+  --green:#2D6A4F; --green-soft:rgba(45,106,79,0.12);
+  --ink:#26344A; --ink-soft:#5B6478; --gold:#B8924A;
+  --card:#FBF7EC; --line:rgba(38,52,74,0.12);
+  --shadow:0 6px 18px rgba(38,52,74,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100vh;}
+body{
+  background:radial-gradient(ellipse at top,var(--paper-deep) 0%,var(--paper) 60%);
+  font-family:'Inter',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;
+}
 
-  /* ── Login screen ── */
-  .login-wrap{
-    min-height:100vh; display:flex; align-items:center;
-    justify-content:center; padding:1.5rem;
-  }
-  .login-card{
-    background:var(--card); border:1px solid var(--line);
-    border-radius:22px; padding:2rem 1.8rem 2.2rem;
-    width:100%; max-width:380px; box-shadow:var(--shadow);
-    text-align:center;
-  }
-  .login-card h1{
-    font-family:'Fraunces',serif; font-size:2.2rem;
-    font-weight:700; margin:0 0 0.2rem; color:var(--ink);
-  }
-  .login-card .sub{
-    font-size:0.8rem; color:var(--ink-soft); text-transform:uppercase;
-    letter-spacing:0.06em; margin-bottom:1.6rem;
-  }
-  .brass-rule{
-    height:3px; width:70px; margin:0 auto 1.6rem;
-    background:linear-gradient(90deg,transparent,var(--gold),transparent);
-    border-radius:2px;
-  }
-  .login-field{ margin-bottom:1rem; text-align:left; }
-  .login-field label{
-    display:block; font-size:0.72rem; text-transform:uppercase;
-    letter-spacing:0.06em; color:var(--ink-soft); margin-bottom:0.35rem;
-  }
-  .login-field input{
-    width:100%; border:1.5px solid var(--line); background:var(--paper);
-    border-radius:12px; padding:0.65rem 0.9rem;
-    font-family:'Inter',sans-serif; font-size:1rem; color:var(--ink); outline:none;
-  }
-  .login-field input:focus{ border-color:var(--gold); }
-  .login-btn{
-    width:100%; margin-top:0.5rem; background:var(--ink); color:var(--card);
-    border:none; border-radius:12px; padding:0.8rem;
-    font-family:'Inter',sans-serif; font-weight:600; font-size:0.95rem;
-    cursor:pointer; transition:background 0.15s;
-  }
-  .login-btn:hover{ background:#1b2740; }
-  .login-btn:disabled{ opacity:0.6; cursor:not-allowed; }
-  .login-err{
-    margin-top:0.8rem; color:var(--margin-red);
-    font-size:0.82rem; min-height:1.1rem;
-  }
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;}
+.login-card{
+  background:var(--card);border:1px solid var(--line);border-radius:22px;
+  padding:2rem 1.8rem 2.2rem;width:100%;max-width:380px;
+  box-shadow:var(--shadow);text-align:center;
+}
+.login-card h1{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:700;color:var(--ink);}
+.login-card .sub{font-size:0.8rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.06em;margin:0.2rem 0 1.4rem;}
+.brass-rule{height:3px;width:70px;margin:0 auto 1.4rem;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:2px;}
+.lf{margin-bottom:1rem;text-align:left;}
+.lf label{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-bottom:0.35rem;}
+.lf input{
+  width:100%;border:1.5px solid var(--line);background:var(--paper);
+  border-radius:12px;padding:0.65rem 0.9rem;
+  font-family:'Inter',sans-serif;font-size:1rem;color:var(--ink);outline:none;
+}
+.lf input:focus{border-color:var(--gold);}
+.login-btn{
+  width:100%;margin-top:0.4rem;background:var(--ink);color:var(--card);
+  border:none;border-radius:12px;padding:0.8rem;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:0.95rem;cursor:pointer;
+}
+.login-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.login-err{margin-top:0.8rem;color:var(--red);font-size:0.82rem;min-height:1.1rem;}
 
-  /* ── App shell ── */
-  .app{ max-width:460px; margin:0 auto; padding:1.1rem 1.1rem 3rem; }
+/* APP */
+.app{max-width:480px;margin:0 auto;padding:1rem 1rem 4rem;}
 
-  /* ── Header ── */
-  .ledger-header{ position:relative; padding:1.4rem 1.3rem 1.3rem; text-align:center; }
-  .ledger-header h1{
-    font-family:'Fraunces',serif; font-weight:700;
-    font-size:2.4rem; letter-spacing:0.01em; margin:0; color:var(--ink);
-  }
-  .ledger-header .subtitle{
-    margin:0.15rem 0 0.9rem; font-size:0.85rem; color:var(--ink-soft);
-    letter-spacing:0.04em; text-transform:uppercase;
-  }
-  .date-stamp{
-    position:absolute; top:0.6rem; right:0.2rem;
-    font-family:'IBM Plex Mono',monospace; font-size:0.62rem; font-weight:600;
-    letter-spacing:0.06em; color:var(--gold); border:1.5px dashed var(--gold);
-    border-radius:50%; width:64px; height:64px;
-    display:flex; align-items:center; justify-content:center;
-    text-align:center; line-height:1.25; transform:rotate(9deg);
-    opacity:0.85; text-transform:uppercase;
-  }
-  .logout-btn{
-    position:absolute; top:0.7rem; left:0.2rem;
-    background:none; border:1.5px solid var(--line);
-    border-radius:999px; padding:0.3rem 0.7rem;
-    font-size:0.72rem; color:var(--ink-soft); cursor:pointer;
-    font-family:'Inter',sans-serif;
-  }
-  .logout-btn:hover{ border-color:var(--margin-red); color:var(--margin-red); }
-  .month-total{
-    display:inline-flex; flex-direction:column; align-items:center; gap:0.1rem;
-    background:var(--card); border:1px solid var(--line);
-    border-radius:14px; padding:0.6rem 1.4rem; box-shadow:var(--shadow);
-  }
-  .month-total .label{ font-size:0.68rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); }
-  .month-total .amount{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:1.35rem; color:var(--margin-red); }
+/* HEADER */
+.hdr{position:relative;padding:1.2rem 0.5rem 1rem;text-align:center;}
+.hdr h1{font-family:'Fraunces',serif;font-weight:700;font-size:2.2rem;color:var(--ink);}
+.hdr .sub{font-size:0.78rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.05em;margin:0.1rem 0 0.8rem;}
+.date-stamp{
+  position:absolute;top:0.5rem;right:0;
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;font-weight:600;
+  letter-spacing:0.05em;color:var(--gold);border:1.5px dashed var(--gold);
+  border-radius:50%;width:60px;height:60px;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;line-height:1.3;transform:rotate(9deg);text-transform:uppercase;
+}
+.logout-btn{
+  position:absolute;top:0.6rem;left:0;background:none;
+  border:1.5px solid var(--line);border-radius:999px;
+  padding:0.28rem 0.65rem;font-size:0.7rem;color:var(--ink-soft);
+  cursor:pointer;font-family:'Inter',sans-serif;
+}
+.logout-btn:hover{border-color:var(--red);color:var(--red);}
 
-  /* ── Tabs ── */
-  .tabs{
-    display:flex; gap:0.4rem; background:var(--card);
-    border:1px solid var(--line); border-radius:14px;
-    padding:0.3rem; margin-top:1.1rem; box-shadow:var(--shadow);
-  }
-  .tab{
-    flex:1; text-align:center; padding:0.55rem 0; border-radius:10px;
-    border:none; background:transparent; font-family:'Inter',sans-serif;
-    font-weight:600; font-size:0.88rem; color:var(--ink-soft); cursor:pointer;
-  }
-  .tab.active{ background:var(--ink); color:var(--card); }
+/* BALANCE CARDS */
+.balance-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:0.8rem;}
+.bal-card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:16px;padding:0.8rem 0.9rem;box-shadow:var(--shadow);
+}
+.bal-card .bl{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-bottom:0.25rem;}
+.bal-card .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle;}
+.bal-card .bv{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.05rem;}
+.bal-card .bv.pos{color:var(--green);}
+.bal-card .bv.neg{color:var(--red);}
+.bal-card .bv.neu{color:var(--ink);}
+.bal-full{
+  grid-column:1/-1;background:var(--ink);color:var(--card);
+  border-radius:16px;padding:0.9rem 1rem;box-shadow:var(--shadow);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.bal-full .bl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.06em;opacity:0.7;}
+.bal-full .bv{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.4rem;}
+.bal-full .bv.pos{color:#6EE7B7;}
+.bal-full .bv.neg{color:#FCA5A5;}
+.bal-full .sync{font-size:0.65rem;opacity:0.6;margin-top:0.15rem;}
 
-  /* ── Entry card ── */
-  .entry-card{
-    background:var(--card); border:1px solid var(--line);
-    border-radius:18px; padding:1.2rem 1.2rem 1.3rem;
-    margin-top:1.1rem; box-shadow:var(--shadow);
-  }
-  .entry-card h2{ font-family:'Fraunces',serif; font-size:1.05rem; font-weight:600; margin:0 0 0.9rem; color:var(--ink); }
-  .field{ margin-bottom:0.85rem; display:block; }
-  .field-label{
-    display:block; font-size:0.72rem; text-transform:uppercase;
-    letter-spacing:0.06em; color:var(--ink-soft); margin-bottom:0.35rem;
-  }
-  .amount-input{
-    display:flex; align-items:center; background:var(--paper);
-    border:1.5px solid var(--line); border-radius:12px; padding:0.55rem 0.9rem;
-  }
-  .amount-input span{
-    font-family:'IBM Plex Mono',monospace; font-weight:600;
-    color:var(--margin-red); margin-right:0.4rem; font-size:1.1rem;
-  }
-  .amount-input input{
-    border:none; background:transparent; outline:none;
-    font-family:'IBM Plex Mono',monospace; font-weight:600;
-    font-size:1.15rem; color:var(--ink); width:100%;
-  }
-  input[type="text"],input[type="date"]{
-    width:100%; border:1.5px solid var(--line); background:var(--paper);
-    border-radius:12px; padding:0.6rem 0.9rem;
-    font-family:'Inter',sans-serif; font-size:1rem; color:var(--ink); outline:none;
-  }
-  input:focus-visible,button:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+/* TABS */
+.tabs{
+  display:flex;gap:0.35rem;background:var(--card);border:1px solid var(--line);
+  border-radius:14px;padding:0.3rem;margin-top:0.9rem;box-shadow:var(--shadow);
+}
+.tab{
+  flex:1;text-align:center;padding:0.5rem 0;border-radius:10px;
+  border:none;background:transparent;font-family:'Inter',sans-serif;
+  font-weight:600;font-size:0.82rem;color:var(--ink-soft);cursor:pointer;
+}
+.tab.active{background:var(--ink);color:var(--card);}
 
-  .category-chips{ display:grid; grid-template-columns:repeat(4,1fr); gap:0.5rem; }
-  .chip{
-    border:1.5px solid var(--line); background:var(--paper); border-radius:12px;
-    padding:0.45rem 0.3rem; display:flex; flex-direction:column;
-    align-items:center; gap:0.3rem; cursor:pointer;
-    font-family:'Inter',sans-serif; font-size:0.68rem; color:var(--ink-soft);
-    transition:border-color 0.15s,background 0.15s;
-  }
-  .chip .stamp{
-    width:26px; height:26px; border-radius:50%; border:1.5px dashed currentColor;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Fraunces',serif; font-weight:700; font-size:0.78rem; transform:rotate(-6deg);
-  }
-  .chip.active{ border-color:var(--ink); background:var(--margin-red-soft); color:var(--ink); font-weight:600; }
+/* CARDS */
+.card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:18px;padding:1.1rem 1.1rem 1.2rem;
+  margin-top:0.9rem;box-shadow:var(--shadow);
+}
+.card h2{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;margin-bottom:0.85rem;color:var(--ink);}
 
-  .when-row{ display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center; }
-  .when-chip{
-    border:1.5px solid var(--line); background:var(--paper);
-    border-radius:999px; padding:0.4rem 0.85rem; font-size:0.78rem;
-    color:var(--ink-soft); cursor:pointer; font-family:'Inter',sans-serif;
-  }
-  .when-chip.active{ border-color:var(--ink); background:var(--ink); color:var(--card); font-weight:600; }
-  .date-pick{ display:none; flex:1 1 140px; padding:0.4rem 0.7rem; font-size:0.85rem; }
-  .date-pick.show{ display:block; }
-  .add-btn{
-    width:100%; margin-top:0.95rem; background:var(--ink); color:var(--card);
-    border:none; border-radius:12px; padding:0.75rem;
-    font-family:'Inter',sans-serif; font-weight:600; font-size:0.95rem;
-    cursor:pointer; transition:transform 0.1s,background 0.15s;
-  }
-  .add-btn:active{ transform:scale(0.98); }
-  .add-btn:hover{ background:#1b2740; }
-  .add-btn:disabled{ opacity:0.6; cursor:not-allowed; }
+/* FORM */
+.field{margin-bottom:0.8rem;}
+.field-label{display:block;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-bottom:0.3rem;}
+.amt-wrap{display:flex;align-items:center;background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:0.5rem 0.85rem;}
+.amt-wrap .sym{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--red);margin-right:0.35rem;font-size:1.1rem;}
+.amt-wrap.credit .sym{color:var(--green);}
+.amt-wrap input{border:none;background:transparent;outline:none;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.1rem;color:var(--ink);width:100%;}
+input[type="text"],input[type="date"],select{
+  width:100%;border:1.5px solid var(--line);background:var(--paper);
+  border-radius:12px;padding:0.55rem 0.85rem;
+  font-family:'Inter',sans-serif;font-size:0.95rem;color:var(--ink);outline:none;
+}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235B6478' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.8rem center;}
 
-  /* ── Method / Report cards ── */
-  .method-card{
-    background:var(--card); border:1px solid var(--line);
-    border-radius:18px; padding:1.1rem 1.2rem 1.2rem;
-    margin-top:1.1rem; box-shadow:var(--shadow);
-  }
-  .method-card h2{ font-family:'Fraunces',serif; font-size:1.05rem; font-weight:600; margin:0 0 0.8rem; color:var(--ink); }
-  .method-row{ margin-bottom:0.65rem; }
-  .method-row:last-child{ margin-bottom:0; }
-  .method-row-top{ display:flex; align-items:center; margin-bottom:0.25rem; }
-  .method-row .dot{ width:8px; height:8px; border-radius:50%; margin-right:0.45rem; flex:0 0 auto; }
-  .method-row .m-label{ flex:1 1 auto; font-size:0.85rem; color:var(--ink); }
-  .method-row .m-amount{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:0.85rem; color:var(--ink); }
-  .method-bar{ height:5px; border-radius:4px; background:var(--line); overflow:hidden; }
-  .method-bar-fill{ height:100%; border-radius:4px; transition:width 0.3s ease; }
-  .method-empty{ font-size:0.85rem; color:var(--ink-soft); }
-  .row .cat .dot{ display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:4px; vertical-align:middle; }
+/* TYPE TOGGLE */
+.type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;}
+.type-btn{
+  padding:0.55rem;border-radius:12px;border:1.5px solid var(--line);
+  background:var(--paper);font-family:'Inter',sans-serif;font-weight:600;
+  font-size:0.88rem;cursor:pointer;transition:all 0.15s;color:var(--ink-soft);
+}
+.type-btn.debit.active{background:var(--red-soft);border-color:var(--red);color:var(--red);}
+.type-btn.credit.active{background:var(--green-soft);border-color:var(--green);color:var(--green);}
 
-  /* Report */
-  .custom-range{ display:flex; align-items:center; gap:0.5rem; margin-top:0.8rem; }
-  .custom-range input[type="date"]{ flex:1 1 auto; font-size:0.85rem; padding:0.45rem 0.6rem; }
-  .custom-range span{ font-size:0.8rem; color:var(--ink-soft); }
-  .report-total{ margin-top:1rem; padding-top:0.9rem; border-top:1px dashed var(--rule); text-align:center; }
-  .report-total .r-label{ display:block; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); }
-  .report-total .r-amount{ display:block; font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:1.7rem; color:var(--margin-red); margin:0.15rem 0; }
-  .report-total .r-count{ font-size:0.78rem; color:var(--ink-soft); }
+/* CHIPS */
+.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:0.4rem;}
+.chip{
+  border:1.5px solid var(--line);background:var(--paper);border-radius:12px;
+  padding:0.4rem 0.2rem;display:flex;flex-direction:column;
+  align-items:center;gap:0.25rem;cursor:pointer;
+  font-family:'Inter',sans-serif;font-size:0.65rem;color:var(--ink-soft);
+}
+.chip .stamp{
+  width:24px;height:24px;border-radius:50%;border:1.5px dashed currentColor;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:700;font-size:0.75rem;transform:rotate(-6deg);
+}
+.chip.active{border-color:var(--ink);background:rgba(38,52,74,0.08);color:var(--ink);font-weight:600;}
 
-  /* ── Ledger rows ── */
-  .ledger-list{ margin-top:1.6rem; }
-  .day-group{ margin-bottom:1.3rem; }
-  .day-head{
-    display:flex; justify-content:space-between; align-items:baseline;
-    padding:0 0.2rem 0.4rem; border-bottom:1.5px solid var(--gold);
-  }
-  .day-head .day-label{ font-family:'Fraunces',serif; font-weight:600; font-size:0.92rem; color:var(--ink); }
-  .day-head .day-total{ font-family:'IBM Plex Mono',monospace; font-size:0.82rem; color:var(--ink-soft); }
-  .row{
-    position:relative; display:flex; align-items:center; gap:0.7rem;
-    padding:0.65rem 0.4rem 0.65rem 0.9rem; border-bottom:1px dashed var(--rule);
-  }
-  .row::before{
-    content:""; position:absolute; left:0; top:0; bottom:0;
-    width:2px; background:var(--margin-red); opacity:0.55;
-  }
-  .row .stamp{
-    flex:0 0 auto; width:30px; height:30px; border-radius:50%;
-    border:1.5px dashed currentColor; display:flex; align-items:center;
-    justify-content:center; font-family:'Fraunces',serif; font-weight:700;
-    font-size:0.85rem; transform:rotate(-5deg);
-  }
-  .row .desc{ flex:1 1 auto; min-width:0; }
-  .row .desc .note{ font-size:0.92rem; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .row .desc .cat{ font-size:0.7rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em; }
-  .row .amount{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:0.95rem; color:var(--margin-red); white-space:nowrap; }
-  .row .del{
-    flex:0 0 auto; background:none; border:none; color:var(--ink-soft);
-    font-size:1.1rem; line-height:1; cursor:pointer; padding:0.2rem 0.3rem; opacity:0.55;
-  }
-  .row .del:hover{ opacity:1; color:var(--margin-red); }
+/* WHEN ROW */
+.when-row{display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;}
+.when-chip{
+  border:1.5px solid var(--line);background:var(--paper);
+  border-radius:999px;padding:0.35rem 0.75rem;font-size:0.75rem;
+  color:var(--ink-soft);cursor:pointer;font-family:'Inter',sans-serif;
+}
+.when-chip.active{border-color:var(--ink);background:var(--ink);color:var(--card);font-weight:600;}
+.date-pick{display:none;flex:1 1 130px;font-size:0.82rem;padding:0.38rem 0.65rem;}
+.date-pick.show{display:block;}
 
-  /* ── Empty / loading ── */
-  .empty-state,.loading-state{ text-align:center; padding:2.2rem 1rem; color:var(--ink-soft); font-size:0.9rem; }
-  .empty-state svg{ opacity:0.5; margin-bottom:0.6rem; }
+.submit-btn{
+  width:100%;margin-top:0.8rem;border:none;border-radius:12px;padding:0.72rem;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:0.92rem;cursor:pointer;
+  transition:opacity 0.15s;
+}
+.submit-btn.debit{background:var(--red);color:#fff;}
+.submit-btn.credit{background:var(--green);color:#fff;}
+.submit-btn:disabled{opacity:0.55;cursor:not-allowed;}
 
-  /* ── Toast ── */
-  .toast{
-    position:fixed; left:50%; bottom:1.4rem; transform:translateX(-50%);
-    background:var(--ink); color:var(--card); padding:0.65rem 1.1rem;
-    border-radius:999px; font-size:0.85rem; display:flex; align-items:center;
-    gap:0.8rem; box-shadow:0 8px 24px rgba(0,0,0,0.25);
-    z-index:50; max-width:90vw;
-  }
-  .toast button{ background:none; border:none; color:var(--gold); font-weight:600; cursor:pointer; font-size:0.85rem; font-family:'Inter',sans-serif; }
+/* LEDGER ROWS */
+.ledger-list{margin-top:1.2rem;}
+.day-group{margin-bottom:1.2rem;}
+.day-head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:0 0.2rem 0.35rem;border-bottom:1.5px solid var(--gold);
+}
+.day-head .dl{font-family:'Fraunces',serif;font-weight:600;font-size:0.88rem;}
+.day-head .dt{font-family:'IBM Plex Mono',monospace;font-size:0.78rem;color:var(--ink-soft);}
+.row{
+  position:relative;display:flex;align-items:center;gap:0.6rem;
+  padding:0.6rem 0.35rem 0.6rem 0.85rem;border-bottom:1px dashed var(--rule);
+}
+.row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px;}
+.row.debit::before{background:var(--red);}
+.row.credit::before{background:var(--green);}
+.row .stamp{flex:0 0 auto;width:28px;height:28px;border-radius:50%;border:1.5px dashed currentColor;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:0.8rem;transform:rotate(-5deg);}
+.row .desc{flex:1 1 auto;min-width:0;}
+.row .desc .note{font-size:0.88rem;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.row .desc .cat{font-size:0.67rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.03em;}
+.row .amount{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:0.9rem;white-space:nowrap;}
+.row.debit .amount{color:var(--red);}
+.row.credit .amount{color:var(--green);}
+.row .del{flex:0 0 auto;background:none;border:none;color:var(--ink-soft);font-size:1rem;cursor:pointer;padding:0.2rem 0.3rem;opacity:0.5;}
+.row .del:hover{opacity:1;color:var(--red);}
 
-  /* ── Error banner ── */
-  .err-banner{
-    background:var(--margin-red-soft); border:1px solid var(--margin-red);
-    color:var(--margin-red); border-radius:12px; padding:0.7rem 0.9rem;
-    font-size:0.8rem; margin-bottom:1rem;
-  }
+/* BREAKDOWN */
+.b-row{margin-bottom:0.6rem;}
+.b-row:last-child{margin-bottom:0;}
+.b-top{display:flex;align-items:center;margin-bottom:0.2rem;}
+.b-dot{width:7px;height:7px;border-radius:50%;margin-right:0.4rem;flex:0 0 auto;}
+.b-label{flex:1;font-size:0.82rem;color:var(--ink);}
+.b-val{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:0.82rem;color:var(--ink);}
+.b-bar{height:4px;border-radius:4px;background:var(--line);overflow:hidden;}
+.b-fill{height:100%;border-radius:4px;}
+.b-empty{font-size:0.82rem;color:var(--ink-soft);}
 
-  /* ── Sync indicator ── */
-  .sync-dot{
-    display:inline-block; width:7px; height:7px; border-radius:50%;
-    background:#3F6E3F; margin-left:0.4rem; vertical-align:middle;
-    transition:background 0.3s;
-  }
-  .sync-dot.saving{ background:var(--gold); }
-  .sync-dot.error{ background:var(--margin-red); }
+/* REPORT */
+.period-row{display:flex;gap:0.4rem;flex-wrap:wrap;}
+.crange{display:flex;align-items:center;gap:0.4rem;margin-top:0.7rem;}
+.crange input{flex:1;font-size:0.82rem;padding:0.4rem 0.6rem;}
+.crange span{font-size:0.78rem;color:var(--ink-soft);}
+.r-summary{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.9rem;padding-top:0.9rem;border-top:1px dashed var(--rule);}
+.r-box{text-align:center;}
+.r-box .rl{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);display:block;margin-bottom:0.15rem;}
+.r-box .rv{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1.1rem;}
+.r-box .rv.out{color:var(--red);}
+.r-box .rv.inn{color:var(--green);}
+.r-box .rv.net.pos{color:var(--green);}
+.r-box .rv.net.neg{color:var(--red);}
+
+/* OPENING BALANCE */
+.ob-form{display:flex;gap:0.5rem;align-items:flex-end;flex-wrap:wrap;margin-top:0.2rem;}
+.ob-form .amt-wrap{flex:1 1 140px;}
+.ob-save{
+  flex:0 0 auto;background:var(--ink);color:var(--card);border:none;
+  border-radius:12px;padding:0.55rem 1rem;font-family:'Inter',sans-serif;
+  font-weight:600;font-size:0.85rem;cursor:pointer;
+}
+
+/* MISC */
+.empty-state{text-align:center;padding:2rem 1rem;color:var(--ink-soft);font-size:0.88rem;}
+.loading-state{text-align:center;padding:2rem;color:var(--ink-soft);}
+.toast{
+  position:fixed;left:50%;bottom:1.3rem;transform:translateX(-50%);
+  background:var(--ink);color:var(--card);padding:0.6rem 1rem;
+  border-radius:999px;font-size:0.82rem;display:flex;align-items:center;
+  gap:0.7rem;box-shadow:0 8px 24px rgba(0,0,0,0.25);z-index:50;max-width:92vw;
+}
+.toast button{background:none;border:none;color:var(--gold);font-weight:600;cursor:pointer;font-size:0.82rem;font-family:'Inter',sans-serif;}
+.err-banner{background:var(--red-soft);border:1px solid var(--red);color:var(--red);border-radius:12px;padding:0.65rem 0.85rem;font-size:0.78rem;margin-bottom:0.8rem;}
 </style>
 </head>
 <body>
 
-<!-- ══════════ LOGIN SCREEN ══════════ -->
+<!-- LOGIN -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-card">
     <h1>Hisaab</h1>
-    <p class="sub">Personal Money Register</p>
+    <p class="sub">Personal Cashbook</p>
     <div class="brass-rule"></div>
-    <div class="login-field">
-      <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email">
-    </div>
-    <div class="login-field">
-      <label>Password</label>
-      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
-    </div>
+    <div class="lf"><label>Email</label><input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email"></div>
+    <div class="lf"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"></div>
     <button class="login-btn" id="loginBtn">Sign in</button>
     <div class="login-err" id="loginErr"></div>
   </div>
 </div>
 
-<!-- ══════════ MAIN APP ══════════ -->
+<!-- APP -->
 <div class="app" id="mainApp" hidden>
   <div class="err-banner" id="errBanner" hidden></div>
 
-  <header class="ledger-header">
+  <header class="hdr">
     <button class="logout-btn" id="logoutBtn">Sign out</button>
     <div class="date-stamp" id="dateStamp">—</div>
-    <h1>Hisaab <span class="sync-dot" id="syncDot" title="Saved"></span></h1>
-    <p class="subtitle">your daily money register</p>
+    <h1>Hisaab</h1>
+    <p class="sub">Personal Cashbook</p>
     <div class="brass-rule"></div>
-    <div class="month-total">
-      <span class="label">This month</span>
-      <span class="amount" id="monthTotal">₹0</span>
-    </div>
   </header>
+
+  <!-- BALANCE OVERVIEW -->
+  <div class="balance-grid" id="balanceGrid">
+    <div class="bal-full">
+      <div>
+        <div class="bl">Net Balance (all accounts)</div>
+        <div class="bv" id="netBalance">₹0</div>
+        <div class="sync" id="syncStatus">●  Saved</div>
+      </div>
+    </div>
+  </div>
 
   <div class="tabs">
     <button type="button" class="tab active" data-tab="ledger">Ledger</button>
     <button type="button" class="tab" data-tab="report">Report</button>
+    <button type="button" class="tab" data-tab="settings">Settings</button>
   </div>
 
   <!-- LEDGER VIEW -->
   <div id="ledgerView">
-    <section class="method-card">
-      <h2>This month, by payment</h2>
-      <div id="methodRows"></div>
-    </section>
-
-    <section class="entry-card">
-      <h2>Add an entry</h2>
+    <div class="card">
+      <h2>Add transaction</h2>
       <form id="entryForm">
         <div class="field">
-          <span class="field-label">Amount</span>
-          <div class="amount-input">
-            <span>₹</span>
-            <input type="number" inputmode="decimal" min="0" step="0.01" id="amountInput" placeholder="0" required>
+          <span class="field-label">Type</span>
+          <div class="type-toggle">
+            <button type="button" class="type-btn debit active" data-type="debit">▼ Money Out</button>
+            <button type="button" class="type-btn credit" data-type="credit">▲ Money In</button>
           </div>
         </div>
         <div class="field">
+          <span class="field-label">Amount</span>
+          <div class="amt-wrap" id="amtWrap">
+            <span class="sym">₹</span>
+            <input type="number" inputmode="decimal" min="0" step="0.01" id="amountInput" placeholder="0" required>
+          </div>
+        </div>
+        <div class="field" id="categoryField">
           <span class="field-label">Category</span>
-          <div class="category-chips" id="categoryChips"></div>
+          <div class="chips" id="categoryChips"></div>
         </div>
         <div class="field">
-          <span class="field-label">Paid via</span>
-          <div class="category-chips" id="paymentChips"></div>
+          <span class="field-label">Account / Paid via</span>
+          <div class="chips" id="paymentChips"></div>
         </div>
         <div class="field">
-          <span class="field-label">Note (optional)</span>
-          <input type="text" id="noteInput" placeholder="e.g. lunch, auto, groceries" maxlength="60">
+          <span class="field-label">Note (what was it for?)</span>
+          <input type="text" id="noteInput" placeholder="e.g. groceries, rent, salary…" maxlength="80">
         </div>
         <div class="field">
           <span class="field-label">When</span>
@@ -359,67 +330,64 @@
             <input type="date" class="date-pick" id="dateInput">
           </div>
         </div>
-        <button type="submit" class="add-btn" id="addBtn">Add to hisaab</button>
+        <button type="submit" class="submit-btn debit" id="submitBtn">Add deduction</button>
       </form>
-    </section>
-
-    <section class="ledger-list" id="ledgerList"></section>
-    <div class="empty-state" id="emptyState" hidden>
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <rect x="7" y="5" width="26" height="30" rx="2" stroke="#5B6478" stroke-width="1.5"/>
-        <line x1="12" y1="13" x2="28" y2="13" stroke="#5B6478" stroke-width="1.5"/>
-        <line x1="12" y1="19" x2="28" y2="19" stroke="#5B6478" stroke-width="1.5"/>
-        <line x1="12" y1="25" x2="22" y2="25" stroke="#5B6478" stroke-width="1.5"/>
-      </svg>
-      <div>Your hisaab is empty.<br>Add your first entry above.</div>
     </div>
+
     <div class="loading-state" id="loadingState">Opening your ledger…</div>
+    <div class="empty-state" id="emptyState" hidden>Your hisaab is empty.<br>Add your first entry above.</div>
+    <div class="ledger-list" id="ledgerList"></div>
   </div>
 
   <!-- REPORT VIEW -->
   <div id="reportView" hidden>
-    <section class="entry-card">
+    <div class="card">
       <h2>Report period</h2>
-      <div class="when-row" id="periodChips">
+      <div class="period-row" id="periodChips">
         <button type="button" class="when-chip active" data-period="month">This month</button>
         <button type="button" class="when-chip" data-period="lastmonth">Last month</button>
         <button type="button" class="when-chip" data-period="all">All time</button>
         <button type="button" class="when-chip" data-period="custom">Custom</button>
       </div>
-      <div class="custom-range" id="customRange" hidden>
-        <input type="date" id="reportFrom">
-        <span>to</span>
-        <input type="date" id="reportTo">
+      <div class="crange" id="customRange" hidden>
+        <input type="date" id="reportFrom"><span>to</span><input type="date" id="reportTo">
       </div>
-      <div class="report-total">
-        <span class="r-label">Total spend</span>
-        <span class="r-amount" id="reportTotal">₹0</span>
-        <span class="r-count" id="reportCount">0 entries</span>
+      <div class="r-summary">
+        <div class="r-box"><span class="rl">Money Out</span><span class="rv out" id="rOut">₹0</span></div>
+        <div class="r-box"><span class="rl">Money In</span><span class="rv inn" id="rIn">₹0</span></div>
+        <div class="r-box" style="grid-column:1/-1"><span class="rl">Net (In − Out)</span><span class="rv net" id="rNet">₹0</span></div>
       </div>
-    </section>
-    <section class="method-card">
-      <h2>By category</h2>
-      <div id="reportCategoryRows"></div>
-    </section>
-    <section class="method-card">
-      <h2>By payment</h2>
-      <div id="reportPaymentRows"></div>
-    </section>
+    </div>
+    <div class="card">
+      <h2>Spend by category</h2>
+      <div id="reportCatRows"></div>
+    </div>
+    <div class="card">
+      <h2>By account</h2>
+      <div id="reportPayRows"></div>
+    </div>
   </div>
 
-</div><!-- end .app -->
+  <!-- SETTINGS VIEW -->
+  <div id="settingsView" hidden>
+    <div class="card">
+      <h2>Opening balance per account</h2>
+      <p style="font-size:0.8rem;color:var(--ink-soft);margin-bottom:1rem;">Set the balance each account had before you started using this app. This ensures your running balance is accurate.</p>
+      <div id="obFields"></div>
+    </div>
+  </div>
+
+</div>
 
 <div class="toast" id="toast" hidden></div>
 
-<!-- ══════════ FIREBASE ══════════ -->
 <script type="module">
-import { initializeApp }            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
-                                    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDatabase, ref, onValue, set, remove }
-                                    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+                           from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, onValue, set, remove, update }
+                           from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-// ── Firebase config ──
 const firebaseConfig = {
   apiKey: "AIzaSyBT7zElD4wam5Om9o7WYT2OCFUfRm3Jg5w",
   authDomain: "hisaab-personal.firebaseapp.com",
@@ -430,32 +398,32 @@ const firebaseConfig = {
   appId: "1:424165911844:web:f6a9b889af19e2520097b1"
 };
 
-const app  = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db   = getDatabase(app);
+const fbApp = initializeApp(firebaseConfig);
+const auth  = getAuth(fbApp);
+const db    = getDatabase(fbApp);
 
-// ── Data ──
+// ── CONSTANTS ──
 const CATEGORIES = [
-  { key:'food',      label:'Food',             letter:'F', color:'#7A5230' },
-  { key:'transport', label:'Transport',         letter:'T', color:'#2C5F6F' },
-  { key:'shopping',  label:'Shopping',          letter:'S', color:'#7A3B6D' },
-  { key:'bills',     label:'Bills',             letter:'B', color:'#8B2635' },
-  { key:'health',    label:'Health',            letter:'H', color:'#3F6E3F' },
-  { key:'fun',       label:'Fun',               letter:'E', color:'#A8742A' },
-  { key:'travel',    label:'Travel',            letter:'V', color:'#3A4F8B' },
-  { key:'other',     label:'Other',             letter:'O', color:'#5B6478' },
+  {key:'food',      label:'Food',      letter:'F', color:'#7A5230'},
+  {key:'transport', label:'Travel',    letter:'T', color:'#2C5F6F'},
+  {key:'shopping',  label:'Shopping',  letter:'S', color:'#7A3B6D'},
+  {key:'bills',     label:'Bills',     letter:'B', color:'#8B2635'},
+  {key:'health',    label:'Health',    letter:'H', color:'#3F6E3F'},
+  {key:'fun',       label:'Fun',       letter:'E', color:'#A8742A'},
+  {key:'family',    label:'Family',    letter:'Fm',color:'#5A3E8B'},
+  {key:'other',     label:'Other',     letter:'O', color:'#5B6478'},
 ];
-const PAYMENT_METHODS = [
-  { key:'cash',    label:'Cash',             letter:'₹', color:'#3F6E3F' },
-  { key:'upi',     label:'UPI (HDFC)',        letter:'U', color:'#2C5F6F' },
-  { key:'regalia', label:'Business Regalia',  letter:'R', color:'#26344A' },
-  { key:'swiggy',  label:'Swiggy Card',       letter:'S', color:'#E5631E' },
+const ACCOUNTS = [
+  {key:'cash',    label:'Cash',            letter:'₹', color:'#3F6E3F'},
+  {key:'upi',     label:'UPI HDFC',        letter:'U', color:'#2C5F6F'},
+  {key:'regalia', label:'Biz Regalia',     letter:'R', color:'#26344A'},
+  {key:'swiggy',  label:'Swiggy Card',     letter:'S', color:'#E5631E'},
 ];
 const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS   = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-// ── Element refs ──
-const $ = id => document.getElementById(id);
+// ── REFS ──
+const $  = id => document.getElementById(id);
 const loginWrap   = $('loginWrap');
 const mainApp     = $('mainApp');
 const loginEmail  = $('loginEmail');
@@ -464,64 +432,62 @@ const loginBtn    = $('loginBtn');
 const loginErr    = $('loginErr');
 const logoutBtn   = $('logoutBtn');
 const errBanner   = $('errBanner');
-const syncDot     = $('syncDot');
-const dateStamp   = $('dateStamp');
-const monthTotal  = $('monthTotal');
+const syncStatus  = $('syncStatus');
+const netBalance  = $('netBalance');
+const balanceGrid = $('balanceGrid');
 const tabs        = document.querySelectorAll('.tab');
 const ledgerView  = $('ledgerView');
 const reportView  = $('reportView');
-const methodRows  = $('methodRows');
+const settingsView= $('settingsView');
 const entryForm   = $('entryForm');
 const amountInput = $('amountInput');
 const noteInput   = $('noteInput');
+const amtWrap     = $('amtWrap');
 const catChips    = $('categoryChips');
 const payChips    = $('paymentChips');
+const submitBtn   = $('submitBtn');
 const whenRow     = $('whenRow');
 const dateInput   = $('dateInput');
-const addBtn      = $('addBtn');
-const ledgerList  = $('ledgerList');
-const emptyState  = $('emptyState');
 const loadingState= $('loadingState');
+const emptyState  = $('emptyState');
+const ledgerList  = $('ledgerList');
 const periodChips = $('periodChips');
 const customRange = $('customRange');
-const reportFrom  = $('reportFrom');
-const reportTo    = $('reportTo');
-const reportTotal = $('reportTotal');
-const reportCount = $('reportCount');
-const reportCatRows = $('reportCategoryRows');
-const reportPayRows = $('reportPaymentRows');
+const rOut        = $('rOut');
+const rIn         = $('rIn');
+const rNet        = $('rNet');
+const reportCatRows=$('reportCatRows');
+const reportPayRows=$('reportPayRows');
+const obFields    = $('obFields');
 const toast       = $('toast');
+const dateStamp   = $('dateStamp');
+const categoryField=$('categoryField');
 
-// ── State ──
-let entries = [];
-let selectedCategory = 'food';
-let selectedPayment  = 'cash';
-let selectedDate     = todayStr();
-let reportPeriod     = 'month';
-let undoTimer        = null;
-let currentUid       = null;
-let dbRef            = null;
+// ── STATE ──
+let entries    = [];
+let openingBal = {};   // {cash:5000, upi:0, ...}
+let selCat     = 'food';
+let selPay     = 'cash';
+let selType    = 'debit';
+let selDate    = todayStr();
+let reportPeriod='month';
+let undoTimer  = null;
+let uid        = null;
 
-// ── Helpers ──
+// ── HELPERS ──
 function todayStr(d){
-  const dt = d ? new Date(d) : new Date();
+  const dt=d?new Date(d):new Date();
   return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
 }
-function yesterdayStr(){
-  const dt = new Date(); dt.setDate(dt.getDate()-1); return todayStr(dt);
-}
-function indianGroup(s){
-  let r='', i=s.length;
-  while(i>2){ r=','+s.slice(i-2,i)+r; i-=2; }
-  return s.slice(0,i)+r;
-}
+function yesterdayStr(){ const dt=new Date(); dt.setDate(dt.getDate()-1); return todayStr(dt); }
+function ig(s){ let r='',i=s.length; while(i>2){r=','+s.slice(i-2,i)+r;i-=2;} return s.slice(0,i)+r; }
 function fmtINR(n){
   n=Number(n); if(!isFinite(n)) n=0;
   const neg=n<0; n=Math.abs(n);
-  const parts=Math.round(n*100)/100..toFixed(2).split('.');
-  const ip=parts[0], dp=parts[1];
-  const grouped = ip.length<=3 ? ip : indianGroup(ip.slice(0,-3))+','+ip.slice(-3);
-  return (neg?'-':'')+'\u20B9'+grouped+(dp==='00'?'':'.'+dp);
+  const p=Math.round(n*100)/100..toFixed(2).split('.');
+  const ip=p[0], dp=p[1];
+  const g=ip.length<=3?ip:ig(ip.slice(0,-3))+','+ip.slice(-3);
+  return (neg?'-':'')+'\u20B9'+g+(dp==='00'?'':'.'+dp);
 }
 function dayLabel(ds){
   if(ds===todayStr()) return 'Today';
@@ -530,181 +496,228 @@ function dayLabel(ds){
   return `${WEEKDAYS[dt.getDay()]}, ${dt.getDate()} ${MONTHS[dt.getMonth()]}`;
 }
 function catInfo(k){ return CATEGORIES.find(c=>c.key===k)||CATEGORIES[CATEGORIES.length-1]; }
-function payInfo(k){ return PAYMENT_METHODS.find(p=>p.key===k)||PAYMENT_METHODS[0]; }
+function accInfo(k){ return ACCOUNTS.find(a=>a.key===k)||ACCOUNTS[0]; }
 function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-function shiftYM(n){
-  const dt=new Date(); dt.setDate(1); dt.setMonth(dt.getMonth()-n);
-  return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-}
-function setSyncDot(state){ syncDot.className='sync-dot '+(state||''); }
+function shiftYM(n){ const dt=new Date(); dt.setDate(1); dt.setMonth(dt.getMonth()-n); return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`; }
 
-// ── Firebase Auth ──
+function setSyncStatus(state){
+  if(state==='saving') syncStatus.textContent='● Saving…';
+  else if(state==='error') syncStatus.textContent='● Not saved';
+  else syncStatus.textContent='● Saved';
+}
+
+function showBanner(msg){ errBanner.hidden=false; errBanner.textContent=msg; }
+
+// ── AUTH ──
 loginBtn.addEventListener('click', async ()=>{
   loginErr.textContent='';
   loginBtn.disabled=true; loginBtn.textContent='Signing in…';
-  try{
-    await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPass.value);
-  }catch(e){
-    loginErr.textContent = e.code==='auth/invalid-credential'
-      ? 'Wrong email or password.' : e.message;
+  try{ await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPass.value); }
+  catch(e){
+    loginErr.textContent=e.code==='auth/invalid-credential'?'Wrong email or password.':e.message;
     loginBtn.disabled=false; loginBtn.textContent='Sign in';
   }
 });
-loginEmail.addEventListener('keydown', e=>{ if(e.key==='Enter') loginPass.focus(); });
-loginPass.addEventListener('keydown',  e=>{ if(e.key==='Enter') loginBtn.click(); });
-
-logoutBtn.addEventListener('click', ()=> signOut(auth));
+loginEmail.addEventListener('keydown',e=>{ if(e.key==='Enter') loginPass.focus(); });
+loginPass.addEventListener('keydown', e=>{ if(e.key==='Enter') loginBtn.click(); });
+logoutBtn.addEventListener('click',()=>signOut(auth));
 
 onAuthStateChanged(auth, user=>{
   if(user){
-    currentUid=user.uid;
-    loginWrap.hidden=true;
-    mainApp.hidden=false;
-    loginBtn.disabled=false; loginBtn.textContent='Sign in';
-    loginPass.value='';
+    uid=user.uid;
+    loginWrap.hidden=true; mainApp.hidden=false;
+    loginBtn.disabled=false; loginBtn.textContent='Sign in'; loginPass.value='';
     initDB();
   } else {
-    currentUid=null; dbRef=null; entries=[];
+    uid=null; entries=[]; openingBal={};
     mainApp.hidden=true; loginWrap.hidden=false;
   }
 });
 
-// ── Firebase Realtime DB ──
+// ── FIREBASE ──
 function initDB(){
-  dbRef = ref(db, `users/${currentUid}/expenses`);
   loadingState.hidden=false;
-  onValue(dbRef, snap=>{
+  // Listen to entries
+  onValue(ref(db,`users/${uid}/entries`), snap=>{
     const data=snap.val();
-    entries = data ? Object.values(data) : [];
+    entries=data?Object.values(data):[];
     entries.sort((a,b)=>b.createdAt-a.createdAt);
     loadingState.hidden=true;
     renderAll();
-    setSyncDot('');
-  }, err=>{
-    showBanner('Could not load data: '+err.message);
-    loadingState.hidden=true;
+  }, err=>{ showBanner('Load error: '+err.message); loadingState.hidden=true; });
+
+  // Listen to opening balances
+  onValue(ref(db,`users/${uid}/openingBal`), snap=>{
+    openingBal=snap.val()||{};
+    renderBalances();
+    renderObFields();
   });
 }
 
 async function saveEntry(entry){
-  setSyncDot('saving');
-  try{
-    await set(ref(db,`users/${currentUid}/expenses/${entry.id}`), entry);
-    setSyncDot('');
-  }catch(e){
-    setSyncDot('error');
-    showToast('Save failed — check connection.');
-  }
+  setSyncStatus('saving');
+  try{ await set(ref(db,`users/${uid}/entries/${entry.id}`), entry); setSyncStatus(''); }
+  catch(e){ setSyncStatus('error'); showToast('Save failed.'); }
 }
-
 async function deleteEntryDB(id){
-  setSyncDot('saving');
-  try{
-    await remove(ref(db,`users/${currentUid}/expenses/${id}`));
-    setSyncDot('');
-  }catch(e){
-    setSyncDot('error');
-    showToast('Delete failed — check connection.');
-  }
+  setSyncStatus('saving');
+  try{ await remove(ref(db,`users/${uid}/entries/${id}`)); setSyncStatus(''); }
+  catch(e){ setSyncStatus('error'); showToast('Delete failed.'); }
+}
+async function saveOpeningBal(key, val){
+  setSyncStatus('saving');
+  try{ await update(ref(db,`users/${uid}/openingBal`),{[key]:val}); setSyncStatus(''); }
+  catch(e){ setSyncStatus('error'); showToast('Save failed.'); }
 }
 
-// ── Render ──
-function renderAll(){ renderList(); renderReport(); }
+// ── BALANCE CALCULATION ──
+function computeBalances(){
+  const bal={};
+  ACCOUNTS.forEach(a=>{ bal[a.key]=(openingBal[a.key]||0); });
+  entries.forEach(e=>{
+    const k=e.account||e.payment||'cash';
+    if(!(k in bal)) bal[k]=0;
+    bal[k]+=(e.type==='credit'?1:-1)*e.amount;
+  });
+  return bal;
+}
 
-function renderChipsInto(container, items, selectedKey, onSelect){
-  container.innerHTML = items.map(c=>`
-    <div class="chip ${c.key===selectedKey?'active':''}" data-key="${c.key}" style="color:${c.color}">
-      <span class="stamp">${c.letter}</span>
-      <span>${c.label}</span>
-    </div>`).join('');
-  container.querySelectorAll('.chip').forEach(el=>{
-    el.addEventListener('click',()=>{ onSelect(el.dataset.key); renderChipsInto(container,items,el.dataset.key,onSelect); });
+function renderBalances(){
+  const bal=computeBalances();
+  const net=Object.values(bal).reduce((s,v)=>s+v,0);
+  netBalance.textContent=fmtINR(net);
+  netBalance.className='bv '+(net>=0?'pos':'neg');
+
+  // Per-account mini cards (remove old ones first)
+  balanceGrid.querySelectorAll('.bal-card').forEach(el=>el.remove());
+  ACCOUNTS.forEach(a=>{
+    const v=bal[a.key]||0;
+    const card=document.createElement('div');
+    card.className='bal-card';
+    card.innerHTML=`<div class="bl"><span class="dot" style="background:${a.color}"></span>${a.label}</div>
+      <div class="bv ${v>=0?'pos':'neg'}">${fmtINR(v)}</div>`;
+    balanceGrid.appendChild(card);
   });
 }
 
-function renderBreakdownInto(container, totals, infoFn, emptyMsg){
-  const keys=Object.keys(totals).sort((a,b)=>totals[b]-totals[a]);
-  if(!keys.length){ container.innerHTML=`<div class="method-empty">${emptyMsg}</div>`; return; }
-  const max=Math.max(...keys.map(k=>totals[k]));
-  container.innerHTML=keys.map(k=>{
-    const info=infoFn(k), pct=max?Math.round(totals[k]/max*100):0;
-    return `<div class="method-row">
-      <div class="method-row-top">
-        <span class="dot" style="background:${info.color}"></span>
-        <span class="m-label">${info.label}</span>
-        <span class="m-amount">${fmtINR(totals[k])}</span>
-      </div>
-      <div class="method-bar"><div class="method-bar-fill" style="width:${pct}%;background:${info.color}"></div></div>
-    </div>`;
-  }).join('');
+// ── RENDER ALL ──
+function renderAll(){ renderLedger(); renderReport(); renderBalances(); }
+
+// ── CHIPS ──
+function renderChips(container, items, selKey, onSelect){
+  container.innerHTML=items.map(c=>`
+    <div class="chip ${c.key===selKey?'active':''}" data-key="${c.key}" style="color:${c.color}">
+      <span class="stamp">${c.letter}</span><span>${c.label}</span>
+    </div>`).join('');
+  container.querySelectorAll('.chip').forEach(el=>{
+    el.addEventListener('click',()=>{ onSelect(el.dataset.key); renderChips(container,items,el.dataset.key,onSelect); });
+  });
 }
 
-function computeTotals(list,keyFn){
-  const t={};
-  list.forEach(e=>{ const k=keyFn(e); t[k]=(t[k]||0)+e.amount; });
-  return t;
-}
-
-function renderList(){
-  const ym=shiftYM(0);
-  const monthEntries=entries.filter(e=>e.date.slice(0,7)===ym);
-  monthTotal.textContent=fmtINR(monthEntries.reduce((s,e)=>s+e.amount,0));
-  renderBreakdownInto(methodRows, computeTotals(monthEntries,e=>e.payment), payInfo, 'No spends logged yet this month.');
-
+// ── LEDGER ──
+function renderLedger(){
   if(!entries.length){ emptyState.hidden=false; ledgerList.innerHTML=''; return; }
   emptyState.hidden=true;
-
   const groups={};
   entries.forEach(e=>{ (groups[e.date]=groups[e.date]||[]).push(e); });
   const dates=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
-
   ledgerList.innerHTML=dates.map(date=>{
     const items=groups[date].slice().sort((a,b)=>b.createdAt-a.createdAt);
-    const dayTotal=items.reduce((s,e)=>s+e.amount,0);
+    const dayOut=items.filter(e=>e.type==='debit').reduce((s,e)=>s+e.amount,0);
+    const dayIn =items.filter(e=>e.type==='credit').reduce((s,e)=>s+e.amount,0);
+    const daySummary=dayOut&&dayIn?`▼${fmtINR(dayOut)} ▲${fmtINR(dayIn)}`
+      :dayOut?`▼ ${fmtINR(dayOut)}`:dayIn?`▲ ${fmtINR(dayIn)}`:'';
     const rows=items.map(e=>{
-      const c=catInfo(e.category), p=payInfo(e.payment);
-      return `<div class="row" data-id="${e.id}">
-        <span class="stamp" style="color:${c.color}">${c.letter}</span>
+      const c=catInfo(e.category);
+      const a=accInfo(e.account||e.payment);
+      const sign=e.type==='credit'?'▲ ':'▼ ';
+      return `<div class="row ${e.type}" data-id="${e.id}">
+        <span class="stamp" style="color:${e.type==='credit'?'#2D6A4F':c.color}">${e.type==='credit'?'▲':c.letter}</span>
         <span class="desc">
-          <div class="note">${esc(e.note||c.label)}</div>
-          <div class="cat"><span class="dot" style="background:${p.color}"></span>${c.label} · ${p.label}</div>
+          <div class="note">${esc(e.note||(e.type==='credit'?'Money In':c.label))}</div>
+          <div class="cat"><span class="dot" style="background:${a.color};display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:3px;vertical-align:middle;"></span>${a.label}${e.type==='debit'?' · '+c.label:''}</div>
         </span>
-        <span class="amount">${fmtINR(e.amount)}</span>
-        <button class="del" data-id="${e.id}" aria-label="Delete">×</button>
+        <span class="amount">${sign}${fmtINR(e.amount)}</span>
+        <button class="del" data-id="${e.id}">×</button>
       </div>`;
     }).join('');
     return `<div class="day-group">
-      <div class="day-head">
-        <span class="day-label">${dayLabel(date)}</span>
-        <span class="day-total">${fmtINR(dayTotal)}</span>
-      </div>${rows}</div>`;
+      <div class="day-head"><span class="dl">${dayLabel(date)}</span><span class="dt">${daySummary}</span></div>
+      ${rows}
+    </div>`;
   }).join('');
-
   ledgerList.querySelectorAll('.del').forEach(btn=>{
     btn.addEventListener('click',()=>deleteEntry(btn.dataset.id));
   });
 }
 
-function filterEntriesForPeriod(){
+// ── BREAKDOWN ──
+function computeTotals(list, keyFn){
+  const t={}; list.forEach(e=>{ const k=keyFn(e); t[k]=(t[k]||0)+e.amount; }); return t;
+}
+function renderBreakdown(container, totals, infoFn, emptyMsg){
+  const keys=Object.keys(totals).sort((a,b)=>totals[b]-totals[a]);
+  if(!keys.length){ container.innerHTML=`<div class="b-empty">${emptyMsg}</div>`; return; }
+  const max=Math.max(...keys.map(k=>totals[k]));
+  container.innerHTML=keys.map(k=>{
+    const info=infoFn(k), pct=max?Math.round(totals[k]/max*100):0;
+    return `<div class="b-row">
+      <div class="b-top"><span class="b-dot" style="background:${info.color}"></span><span class="b-label">${info.label}</span><span class="b-val">${fmtINR(totals[k])}</span></div>
+      <div class="b-bar"><div class="b-fill" style="width:${pct}%;background:${info.color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ── REPORT ──
+function filterPeriod(){
   if(reportPeriod==='month')     return entries.filter(e=>e.date.slice(0,7)===shiftYM(0));
   if(reportPeriod==='lastmonth') return entries.filter(e=>e.date.slice(0,7)===shiftYM(1));
   if(reportPeriod==='custom'){
-    const from=reportFrom.value||'0000-01-01', to=reportTo.value||'9999-12-31';
+    const from=$('reportFrom').value||'0000-01-01', to=$('reportTo').value||'9999-12-31';
     return entries.filter(e=>e.date>=from&&e.date<=to);
   }
   return entries.slice();
 }
-
 function renderReport(){
-  const list=filterEntriesForPeriod();
-  const total=list.reduce((s,e)=>s+e.amount,0);
-  reportTotal.textContent=fmtINR(total);
-  reportCount.textContent=list.length+(list.length===1?' entry':' entries');
-  renderBreakdownInto(reportCatRows, computeTotals(list,e=>e.category), catInfo, 'No spends in this period.');
-  renderBreakdownInto(reportPayRows, computeTotals(list,e=>e.payment),  payInfo, 'No spends in this period.');
+  const list=filterPeriod();
+  const out=list.filter(e=>e.type==='debit').reduce((s,e)=>s+e.amount,0);
+  const inn=list.filter(e=>e.type==='credit').reduce((s,e)=>s+e.amount,0);
+  const net=inn-out;
+  rOut.textContent=fmtINR(out);
+  rIn.textContent=fmtINR(inn);
+  rNet.textContent=(net>=0?'+':'')+fmtINR(net);
+  rNet.className='rv net '+(net>=0?'pos':'neg');
+  const debits=list.filter(e=>e.type==='debit');
+  renderBreakdown(reportCatRows, computeTotals(debits,e=>e.category), catInfo, 'No expenses in this period.');
+  renderBreakdown(reportPayRows, computeTotals(list,e=>e.account||e.payment), accInfo, 'No entries in this period.');
 }
 
-// ── Entry actions ──
+// ── OPENING BALANCE SETTINGS ──
+function renderObFields(){
+  obFields.innerHTML=ACCOUNTS.map(a=>`
+    <div class="field">
+      <span class="field-label"><span class="dot" style="background:${a.color};display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle;"></span>${a.label}</span>
+      <div style="display:flex;gap:0.5rem;align-items:center;">
+        <div class="amt-wrap" style="flex:1"><span class="sym">₹</span>
+          <input type="number" inputmode="decimal" step="0.01" data-acc="${a.key}"
+            class="ob-input" value="${openingBal[a.key]||0}" placeholder="0">
+        </div>
+        <button type="button" class="ob-save" data-acc="${a.key}">Save</button>
+      </div>
+    </div>`).join('');
+  obFields.querySelectorAll('.ob-save').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const key=btn.dataset.acc;
+      const val=parseFloat(obFields.querySelector(`.ob-input[data-acc="${key}"]`).value)||0;
+      openingBal[key]=val;
+      await saveOpeningBal(key,val);
+      showToast(`Opening balance for ${accInfo(key).label} saved`);
+      renderBalances();
+    });
+  });
+}
+
+// ── ENTRY ACTIONS ──
 async function deleteEntry(id){
   const idx=entries.findIndex(e=>e.id===id);
   if(idx===-1) return;
@@ -712,50 +725,76 @@ async function deleteEntry(id){
   renderAll();
   await deleteEntryDB(id);
   showToast('Entry removed', async()=>{
-    entries.push(removed);
-    renderAll();
-    await saveEntry(removed);
+    entries.push(removed); renderAll(); await saveEntry(removed);
   });
 }
 
-// ── Form submit ──
+// ── FORM ──
+// Type toggle
+document.querySelectorAll('.type-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    selType=btn.dataset.type;
+    amtWrap.classList.toggle('credit',selType==='credit');
+    submitBtn.className='submit-btn '+selType;
+    submitBtn.textContent=selType==='debit'?'Add deduction':'Add top-up';
+    categoryField.style.display=selType==='credit'?'none':'block';
+  });
+});
+
 entryForm.addEventListener('submit', async e=>{
   e.preventDefault();
   const amt=parseFloat(amountInput.value);
   if(!amt||amt<=0) return;
-  addBtn.disabled=true;
+  submitBtn.disabled=true;
   const entry={
-    id: Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+    id: Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+    type: selType,
     amount: amt,
-    category: selectedCategory,
-    payment: selectedPayment,
-    note: noteInput.value.trim().slice(0,60),
-    date: selectedDate,
+    category: selType==='credit'?'other':selCat,
+    account: selPay,
+    note: noteInput.value.trim().slice(0,80),
+    date: selDate,
     createdAt: Date.now(),
   };
   entries.unshift(entry);
   renderAll();
   await saveEntry(entry);
-  addBtn.disabled=false;
-  showToast(`Added ${fmtINR(amt)} · ${catInfo(selectedCategory).label}`);
+  submitBtn.disabled=false;
+  showToast(`${selType==='credit'?'▲ Top-up':'▼ Deduction'} ${fmtINR(amt)} added`);
   amountInput.value=''; noteInput.value='';
   whenRow.querySelector('[data-when="today"]').click();
   amountInput.focus();
 });
 
-// ── Tab switching ──
+// When row
+whenRow.querySelectorAll('.when-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    whenRow.querySelectorAll('.when-chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    const w=chip.dataset.when;
+    if(w==='today'){ selDate=todayStr(); dateInput.classList.remove('show'); }
+    else if(w==='yesterday'){ selDate=yesterdayStr(); dateInput.classList.remove('show'); }
+    else { dateInput.classList.add('show'); dateInput.value=dateInput.value||todayStr(); selDate=dateInput.value; dateInput.focus(); }
+  });
+});
+dateInput.addEventListener('change',()=>{ selDate=dateInput.value||todayStr(); });
+
+// Tabs
 tabs.forEach(tab=>{
   tab.addEventListener('click',()=>{
-    tabs.forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
-    const which=tab.dataset.tab;
-    ledgerView.hidden=which!=='ledger';
-    reportView.hidden=which!=='report';
-    if(which==='report') renderReport();
+    tabs.forEach(t=>t.classList.remove('active')); tab.classList.add('active');
+    const w=tab.dataset.tab;
+    ledgerView.hidden=w!=='ledger';
+    reportView.hidden=w!=='report';
+    settingsView.hidden=w!=='settings';
+    if(w==='report') renderReport();
+    if(w==='settings') renderObFields();
   });
 });
 
-// ── Period chips ──
+// Period chips
 periodChips.querySelectorAll('.when-chip').forEach(chip=>{
   chip.addEventListener('click',()=>{
     periodChips.querySelectorAll('.when-chip').forEach(c=>c.classList.remove('active'));
@@ -763,55 +802,35 @@ periodChips.querySelectorAll('.when-chip').forEach(chip=>{
     reportPeriod=chip.dataset.period;
     customRange.hidden=reportPeriod!=='custom';
     if(reportPeriod==='custom'){
-      if(!reportFrom.value) reportFrom.value=todayStr();
-      if(!reportTo.value)   reportTo.value=todayStr();
+      if(!$('reportFrom').value) $('reportFrom').value=todayStr();
+      if(!$('reportTo').value)   $('reportTo').value=todayStr();
     }
     renderReport();
   });
 });
-reportFrom.addEventListener('change', renderReport);
-reportTo.addEventListener('change',   renderReport);
+$('reportFrom').addEventListener('change',renderReport);
+$('reportTo').addEventListener('change',renderReport);
 
-// ── When row ──
-whenRow.querySelectorAll('.when-chip').forEach(chip=>{
-  chip.addEventListener('click',()=>{
-    whenRow.querySelectorAll('.when-chip').forEach(c=>c.classList.remove('active'));
-    chip.classList.add('active');
-    const when=chip.dataset.when;
-    if(when==='today'){ selectedDate=todayStr(); dateInput.classList.remove('show'); }
-    else if(when==='yesterday'){ selectedDate=yesterdayStr(); dateInput.classList.remove('show'); }
-    else{ dateInput.classList.add('show'); dateInput.value=dateInput.value||todayStr(); selectedDate=dateInput.value; dateInput.focus(); }
-  });
-});
-dateInput.addEventListener('change',()=>{ selectedDate=dateInput.value||todayStr(); });
-
-// ── Toast ──
+// Toast
 function showToast(msg, undoFn){
   clearTimeout(undoTimer);
   toast.innerHTML='';
   const s=document.createElement('span'); s.textContent=msg; toast.appendChild(s);
-  if(undoFn){
-    const b=document.createElement('button'); b.textContent='Undo';
-    b.addEventListener('click',()=>{ undoFn(); toast.hidden=true; });
-    toast.appendChild(b);
-  }
+  if(undoFn){ const b=document.createElement('button'); b.textContent='Undo'; b.addEventListener('click',()=>{ undoFn(); toast.hidden=true; }); toast.appendChild(b); }
   toast.hidden=false;
   undoTimer=setTimeout(()=>{ toast.hidden=true; },4500);
 }
 
-function showBanner(msg){ errBanner.hidden=false; errBanner.textContent=msg; }
-
-// ── Date stamp ──
+// Date stamp
 function renderDateStamp(){
   const dt=new Date();
   dateStamp.innerHTML=`${String(dt.getDate()).padStart(2,'0')}<br>${MONTHS[dt.getMonth()]}<br>${dt.getFullYear()}`;
 }
 
-// ── Init chips on load ──
+// ── INIT ──
 renderDateStamp();
-renderChipsInto(catChips, CATEGORIES, selectedCategory, k=>{ selectedCategory=k; });
-renderChipsInto(payChips, PAYMENT_METHODS, selectedPayment, k=>{ selectedPayment=k; });
-
+renderChips(catChips, CATEGORIES, selCat, k=>{ selCat=k; });
+renderChips(payChips, ACCOUNTS,    selPay, k=>{ selPay=k; });
 </script>
 </body>
 </html>
