@@ -484,7 +484,7 @@ function ig(s){ let r='',i=s.length; while(i>2){r=','+s.slice(i-2,i)+r;i-=2;} re
 function fmtINR(n){
   n=Number(n); if(!isFinite(n)) n=0;
   const neg=n<0; n=Math.abs(n);
-  const p=Math.round(n*100)/100..toFixed(2).split('.');
+  const p=(Math.round(n*100)/100).toFixed(2).split('.');
   const ip=p[0], dp=p[1];
   const g=ip.length<=3?ip:ig(ip.slice(0,-3))+','+ip.slice(-3);
   return (neg?'-':'')+'\u20B9'+g+(dp==='00'?'':'.'+dp);
