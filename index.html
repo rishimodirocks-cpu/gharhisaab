@@ -139,7 +139,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .type-btn.credit.active{background:var(--green-soft);border-color:var(--green);color:var(--green);}
 
 /* CHIPS */
-.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:0.4rem;}
+.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:0.4rem;}.chips.wide{grid-template-columns:repeat(4,1fr);}
 .chip{
   border:1.5px solid var(--line);background:var(--paper);border-radius:12px;
   padding:0.4rem 0.2rem;display:flex;flex-direction:column;
@@ -414,10 +414,13 @@ const CATEGORIES = [
   {key:'other',     label:'Other',     letter:'O', color:'#5B6478'},
 ];
 const ACCOUNTS = [
-  {key:'cash',    label:'Cash',            letter:'₹', color:'#3F6E3F'},
-  {key:'upi',     label:'UPI HDFC',        letter:'U', color:'#2C5F6F'},
-  {key:'regalia', label:'Biz Regalia',     letter:'R', color:'#26344A'},
-  {key:'swiggy',  label:'Swiggy Card',     letter:'S', color:'#E5631E'},
+  {key:'cash',        label:'Cash (Common)',   letter:'C', color:'#3F6E3F'},
+  {key:'cash_rishi',  label:'Cash Rishi',      letter:'R', color:'#26344A'},
+  {key:'cash_aastha', label:'Cash Aastha',     letter:'A', color:'#7A3B6D'},
+  {key:'upi',         label:'UPI HDFC',        letter:'U', color:'#2C5F6F'},
+  {key:'upi_sbi',     label:'UPI SBI',         letter:'S', color:'#1A5276'},
+  {key:'regalia',     label:'Biz Regalia',     letter:'Rg',color:'#1a1a2e'},
+  {key:'swiggy',      label:'Swiggy Card',     letter:'Sw',color:'#E5631E'},
 ];
 const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS   = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -538,7 +541,7 @@ onAuthStateChanged(auth, user=>{
 function initDB(){
   loadingState.hidden=false;
   // Listen to entries
-  onValue(ref(db,`users/${uid}/entries`), snap=>{
+  onValue(ref(db,`home/entries`), snap=>{
     const data=snap.val();
     entries=data?Object.values(data):[];
     entries.sort((a,b)=>b.createdAt-a.createdAt);
@@ -547,7 +550,7 @@ function initDB(){
   }, err=>{ showBanner('Load error: '+err.message); loadingState.hidden=true; });
 
   // Listen to opening balances
-  onValue(ref(db,`users/${uid}/openingBal`), snap=>{
+  onValue(ref(db,`home/openingBal`), snap=>{
     openingBal=snap.val()||{};
     renderBalances();
     renderObFields();
@@ -556,17 +559,17 @@ function initDB(){
 
 async function saveEntry(entry){
   setSyncStatus('saving');
-  try{ await set(ref(db,`users/${uid}/entries/${entry.id}`), entry); setSyncStatus(''); }
+  try{ await set(ref(db,`home/entries/${entry.id}`), entry); setSyncStatus(''); }
   catch(e){ setSyncStatus('error'); showToast('Save failed.'); }
 }
 async function deleteEntryDB(id){
   setSyncStatus('saving');
-  try{ await remove(ref(db,`users/${uid}/entries/${id}`)); setSyncStatus(''); }
+  try{ await remove(ref(db,`home/entries/${id}`)); setSyncStatus(''); }
   catch(e){ setSyncStatus('error'); showToast('Delete failed.'); }
 }
 async function saveOpeningBal(key, val){
   setSyncStatus('saving');
-  try{ await update(ref(db,`users/${uid}/openingBal`),{[key]:val}); setSyncStatus(''); }
+  try{ await update(ref(db,`home/openingBal`),{[key]:val}); setSyncStatus(''); }
   catch(e){ setSyncStatus('error'); showToast('Save failed.'); }
 }
 
@@ -635,7 +638,7 @@ function renderLedger(){
         <span class="stamp" style="color:${e.type==='credit'?'#2D6A4F':c.color}">${e.type==='credit'?'▲':c.letter}</span>
         <span class="desc">
           <div class="note">${esc(e.note||(e.type==='credit'?'Money In':c.label))}</div>
-          <div class="cat"><span class="dot" style="background:${a.color};display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:3px;vertical-align:middle;"></span>${a.label}${e.type==='debit'?' · '+c.label:''}</div>
+          <div class="cat"><span class="dot" style="background:${a.color};display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:3px;vertical-align:middle;"></span>${a.label}${e.type==='debit'?' · '+c.label:''}${e.addedBy?' · <b>'+e.addedBy+'</b>':''}</div>
         </span>
         <span class="amount">${sign}${fmtINR(e.amount)}</span>
         <button class="del" data-id="${e.id}">×</button>
@@ -748,6 +751,8 @@ entryForm.addEventListener('submit', async e=>{
   const amt=parseFloat(amountInput.value);
   if(!amt||amt<=0) return;
   submitBtn.disabled=true;
+  const userEmail = auth.currentUser ? auth.currentUser.email : '';
+  const userName = userEmail.split('@')[0];
   const entry={
     id: Date.now().toString(36)+Math.random().toString(36).slice(2,6),
     type: selType,
@@ -757,6 +762,7 @@ entryForm.addEventListener('submit', async e=>{
     note: noteInput.value.trim().slice(0,80),
     date: selDate,
     createdAt: Date.now(),
+    addedBy: userName,
   };
   entries.unshift(entry);
   renderAll();
